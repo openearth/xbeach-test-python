@@ -1,80 +1,97 @@
 #'XBeach Diagnostic Test Model Generator'
-# Creating different profile shapes
-# V0.0 Leijnse -- 15-05-17
+# Making bathymetry profiles
 
 import numpy as np
 from xbeachtools import XBeachBathymetry
 import logging
 
 logger = logging.getLogger(__name__)
-logging.info('bathy.py is called for')
+logger.info('bathy.py is called for')
 
-#==============================================================================
-# # return XBeachBathymetry(x, z)  --> hoe zou dat werken??  
-#==============================================================================
-
-class Bathymetry:  #(XBeachBathymetry)     #(XBeachParams) ??
-    def __init__(self, dunewidth, shorewidth, dx, dy, *args):  #OF HIER MEER OF MINDER BIJ???
-        self.dunewidth = dunewidth
-        self.shorewidth = shorewidth
+class Bathymetry(XBeachBathymetry):  
+    def __init__(self, dx= 1, dy= 1, width= 100, dunewidth=25, shorewidth= 75, length= 0, height= 0, slope = 1, duneslope= 1, D50= 200e-6, m= 0.67, s= 1.6, v= 1e-6, **kwargs):  
+    
+        self.x = None #x = None
+        self.y = None #y = None
+        self.z = None #z = None
+        
         self.dx = dx
         self.dy = dy
-
+        self.width = width
+        self.dunewidth = dunewidth
+        self.shorewidth = shorewidth
+        self.length = length
+        self.height = height
+        self.slope = slope
+        self.duneslope = duneslope
+        self.D50 = D50
+        self.m = m
+        self.s = s
+        self.v = v        
+    
     ### GENERAL BUILDING BLOCKS###
-    def dean(self, width, D50, height= 0, m= 0.67, s= 1.6, v= 1e-6):     #Mocht je ook dean boven water willen moet dat apart even bekeken worden of dit goed gaat. --> height optie is hiervoor bedoeld
+    def dean(self):     
         logger.debug('dean profile is called for')    
-        x = np.arange(-width, 0, self.dx)
-        A = 0.5*((s-1)*9.81*D50**2/(18*v))**0.44     #Nog een keer opzoeken of overige waarden als 18, 0.44 ook variabelen moeten worden
-        z = -abs(A*np.power(-1*x, m)) + height
-        x += width   
+        x = np.arange(-self.width, 0, self.dx)
+        ws = ((self.s-1)*9.81*self.D50**2/(18*self.v))                          #eq 6.7 in coastal dynamics book  
+        A = 0.5*ws**0.44                                                        #eq 7.7 in coastal dynamics book  
+        z = -abs(A*np.power(-1*x, self.m)) + self.height
+        x += self.width   
         return x, z
 
-    def hor(self, width, height= 0):
+    def hor(self):
         logger.debug('horizontal profile is called for')
-        x = np.arange(0, width, self.dx)
-        z = 0*x + height
+        x = np.arange(0, self.width, self.dx)
+        z = 0*x + self.height
         return x, z
     
-    def slope(self, width, slope, height= 0):   
+    def sloping(self):   
         logger.debug('slope profile is called for')    
-        x = np.arange(0, width, self.dx)                
-        z = x * slope + height
+        x = np.arange(0, self.width, self.dx)                
+        z = x * self.slope + self.height
         return x, z
     
-    def yuniform(self, x, z, length):
+    def yuniform(self, x, z):
         logger.debug('yuniform is called for')
-        y = np.arange(0, length+self.dy, self.dy)
+        y = np.arange(0, self.length+self.dy, self.dy)
         X,Y = np.meshgrid(x, y)
         Z = np.tile(z, (len(y),1))              
-        return X,Y,Z
+        return X, Y, Z
     
     ###SPECIFIC BATHYMETRY PROFILES###
-    def dune_1d(self, D50, duneslope, *args, height=0, **kwargs):               #Profile consists of a Dean profile for the shore and a linear slope for the dune
-        logger.debug('dune_1d is called for')       #
-        xshore, zshore = self.dean(self.shorewidth, D50, height) #self.shorewidth kan weg
-        xdune, zdune = self.slope(self.dunewidth+self.dx, duneslope, height)    #kijken of hier self. weg kan
-        x = []     
-        x.extend(xshore)
-        x.extend(xdune+ xshore[-1]+ self.dx)
-        z = []      #ipv return wordt dit self.z
-        z.extend(zshore)
-        z.extend(zdune)
-        return x,z
-    
-    def dune_2d(self, D50, duneslope, length, *args, height= 0, **kwargs):
+    def dune_1d(self, **kwargs):               
+        logger.debug('dune_1d is called for')
+        self.width = self.shorewidth
+        xshore, zshore = self.dean() 
+        self.width = self.dunewidth + self.dx
+        self.slope = self.duneslope
+        xdune, zdune = self.sloping()   
+        
+        self.x = []     
+        self.x.extend(xshore)
+        self.x.extend(xdune + xshore[-1] + self.dx)
+        
+        self.z = []      
+        self.z.extend(zshore)
+        self.z.extend(zdune)
+            
+    def dune_2d(self, **kwargs):
         logger.debug('dune_2d is called for')
-        x,z = self.dune_1d(D50, duneslope, height)
-        X,Y,Z = self.yuniform(x, z, length)
-        return X,Y,Z
-    
-    def flat_1d(self, height, *args, **kwargs):
+        self.dune_1d()
+        self.x, self.y, self.z = self.yuniform(self.x, self.z)
+          
+    def flat_1d(self, **kwargs):
         logger.debug('flat_1d is called for')
-        x,z = self.hor(self.shorewidth + self.dunewidth+self.dx, height)
-        return x,z
+        self.width = self.shorewidth + self.dunewidth + self.dx
+        self.x, self.z = self.hor()
     
-    def flat_2d(self, length, height, *args, **kwargs):
+    def flat_2d(self, **kwargs):
         logger.debug('flat_2d is called for')
-        x,z = self.flat_1d(height)
-        X,Y,Z = self.yuniform(x, z, length)
-        return X,Y,Z
-    
+        self.flat_1d()
+        self.x, self.y, self.z = self.yuniform(self.x, self.z)
+
+#TO DO:    
+
+#moeten hier dan nog dingen als asarray en reshape gebeuren als in xbeach.py??? --> omdat je het nu als XBeachBathymetry object uitgeeft
+    #dit lijkt nog niet goed te gaan
+#        super(Bathymetry, self).__init__()  nodig?

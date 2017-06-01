@@ -1,17 +1,14 @@
-# 'XBeach Diagnostic Test Model Generator'
-# Setup of model
-# V0.8 Leijnse -- 29-05-17
-   
 #%%GENERAL#####################################################################
 from xbeachtools import XBeachModel
+from xbeachtools import XBeachBathymetry
 import os 
 import logging
 import json
 from bathy import Bathymetry
-from user_input import p,u
+from user_input import b,p,u
 
 logger = logging.getLogger(__name__)
-logging.info('setup.py is called for')
+logger.info('setup.py is called for')
 
 #%%MAKING THE FOLDER STRUCTURE#################################################
 ###MODULES###
@@ -39,74 +36,69 @@ for i in range(len(u['tests'])):
         for k in range(len(runs)):
             logger.debug(runs[k])
             
-            mpiboundary = 'man'            
-            if runs[k] in ['m1','benchmark']:   
-                mmpi = 1
-                nmpi = 1
-            elif runs[k] in ['m3', 'm3n1']:
-                mmpi = 3
-                nmpi = 1
-            elif runs[k] in ['m1n3']:
-                mmpi = 1
-                nmpi = 3
-            elif runs[k] in ['m3n3']:
-                mmpi = 3
-                nmpi = 3
-            
-            p['mmpi'] = mmpi    #OVerschrijven van de standaard waarde die nu in de p-dictionary staat
-            p['nmpi'] = nmpi
-            
-            #%%MAKING THE PARAMS.TXT FILES###            
             path = (u['diroutmain']   + u['module'] + '/' + u['tests'][i] + '/' + u['cases'][j] + '/' + runs[k] + '/')
-            os.makedirs(path, exist_ok=False)    
+            os.makedirs(path, exist_ok=False)     
             
+            if runs[k] in ['m1','benchmark']:   
+                p['mmpi']  = 1
+                p['nmpi'] = 1
+                shell = 'xbeach'
+                
+            elif runs[k] in ['m3', 'm3n1']:
+                p['mmpi']  = 3
+                p['nmpi'] = 1
+                shell = 'mpirun -n 4 xbeach'
+                
+            elif runs[k] in ['m1n3']:
+                p['mmpi']  = 1
+                p['nmpi'] = 3
+                shell = 'mpirun -n 4 xbeach'
+                
+            elif runs[k] in ['m3n3']:
+                p['mmpi']  = 3
+                p['nmpi'] = 3
+                shell = 'mpirun -n 10 xbeach'
+                        
+            #%%MAKING THE PARAMS.TXT FILES###
             xb = XBeachModel(**p)  
-                             
-            bathy = Bathymetry(u['dunewidth'], u['shorewidth'], p['dx'], p['dy'])
-            
-            if u['shape'][i] in ['flat']:      
-                if runs[k] in ['m1','m3']:
-                    x,z = bathy.flat_1d(**p, **u)                            
-                else:
-                    x,y,z = bathy.flat_2d(**p, **u)         
+            bathy = Bathymetry(**b, **p)
+                         
+            if runs[k] in ['m1','m3']:
+                if b['shape'][i] in ['flat']: 
+                    bathy.flat_1d()
+                elif b['shape'][i] in ['dune']:    
+                    bathy.dune_1d() 
+                XBbathy = XBeachBathymetry(bathy.x, bathy.z)                   
+                        
+            else:
+                if b['shape'][i] in ['flat']:
+                    bathy.flat_2d()
+                elif b['shape'][i] in ['dune']:
+                    bathy.dune_2d()
+                XBbathy = XBeachBathymetry(bathy.x, bathy.y, bathy.z)
                      
-            if u['shape'][i] in ['dune']:
-                if runs[k] in ['m1','m3']:
-                    x,z = bathy.dune_1d( **p, **u)                          
-                else:
-                    x,y,z = bathy.dune_2d(**p, **u) 
-                      
-            if runs[k] in ['m1','m3']:  #1D runs
-                if u['tests'][i] in ['neg_x']:
-                    xb.set_bathymetry(x, z, dx= p['dx'], mirror= False, turn= False, grex= u['grex'], grextype= u['grextype'])
-                elif u['tests'][i] in ['pos_x']:
-                    xb.set_bathymetry(x, z, dx= p['dx'], mirror= True, turn= False, grex= u['grex'], grextype= u['grextype'])
+            XBbathy.gridextend(grextype= b['grextype'], grex= b['grex'], dx= p['dx'])
+                       
+            if runs[k] in ['m1','m3']:  
+                if u['tests'][i] in ['pos_x']:
+                    XBbathy.mirror()
+
+            else:  
+                if u['tests'][i] in ['pos_x']:
+                    XBbathy.mirror()
                 elif u['tests'][i] in ['neg_y']:
-                    xb.set_bathymetry(x, z, dx= p['dx'], mirror= False, turn= True, grex= u['grex'], grextype= u['grextype'])
+                    XBbathy.turn()                
                 elif u['tests'][i] in ['pos_y']:
-                    xb.set_bathymetry(x, z, dx= p['dx'], mirror= True, turn= True, grex= u['grex'], grextype= u['grextype'])    #Kan dit nog compacter? --> JA hier vraag je dan allen .mirror   xb.set_bathymetry moet al hiervoor gezet worden
-                else:                                                           #is meant for 'hor', treated as neg_x
-                    xb.set_bathymetry(x, z, dx= p['dx'], mirror= False, turn= False, grex= u['grex'], grextype= u['grextype'])
-                    
-            else:   #2D runs
-                if u['tests'][i] in ['neg_x']:
-                    xb.set_bathymetry(x, y, z, dx= p['dx'], mirror= False, turn= False, grex= u['grex'], grextype= u['grextype'])
-                elif u['tests'][i] in ['pos_x']:
-                    xb.set_bathymetry(x, y, z, dx= p['dx'], mirror= True, turn= False, grex= u['grex'], grextype= u['grextype'])
-                elif u['tests'][i] in ['neg_y']:
-                    xb.set_bathymetry(x, y, z, dx= p['dx'], mirror= False, turn= True, grex= u['grex'], grextype= u['grextype'])
-                elif u['tests'][i] in ['pos_y']:
-                    xb.set_bathymetry(x, y, z, dx= p['dx'], mirror= True, turn= True, grex= u['grex'], grextype= u['grextype'])
-                else:                                                           #is meant for 'hor', treated as neg_x
-                    xb.set_bathymetry(x, y, z, dx= p['dx'], mirror= False, turn= False, grex= u['grex'], grextype= u['grextype'])
+                    XBbathy.mirror()
+                    XBbathy.turn()
+            
+            xb['bathymetry'] = XBbathy   #BYPASSEN VAN xb.set_bathymetry
 
             if u['waves'] in ['yes']:
                 xb.set_waves(u['ow']) 
             
             xb.write(path)   
-                      
-#%%MAKING THE OTHERUSERINPUT.TXT FILE##############################   
-os.chdir(u['diroutmain']  + '/' ) #+ u['module']) 
-with open('Udictionary.txt', 'w') as f:
-    json.dump(u,f, indent=4)
-
+                        
+            os.chdir(path)            
+            with open('run.sh', 'w') as f:  #making shell executable
+                json.dump(shell, f, indent=4)
