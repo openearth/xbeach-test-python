@@ -3,6 +3,7 @@
 
 import numpy as np
 import logging
+from xb_read_mpi_dims import mpidims
 #from analyze_this import c, n, u
 
 
@@ -28,7 +29,7 @@ def bedlevelchange(zb0, zbEnd):
     return check
     
 ###CHECK: Mass balance########################################
-def massbalance(zb0, zbEnd, dx, dy, massbalanceconstraint):
+def massbalance(zb0, zbEnd, dx, dy, massbalanceconstraint):         #werkt ook voor de wave test als je zs0 en zsEnd erin stopt???
     logger.info('Mass balance is called for') 
     #processing
     mass0 = zb0.sum() * dx * dy
@@ -116,27 +117,102 @@ def n_slope(zb0, zbEnd, nx, ny, dy, slploc, slptheo, slpcon):               #DE 
         raise ValueError('ny>0 expected, got:', ny)
     return check
 
-#==============================================================================
-# ###CHECK: MPI m-direction#####################################
-# def m_mpi():
-#     print('MPI m-direction')    #TEMP
-#     #processing 
-#     
-#     #checking
-#     
-#     #HIER OOK NOG INBOUWEN DAT HIJ CHECKT OF MMPI>1, HIJ MOET ERGENS DAN OOK EEN WARNING GEVEN
-#     return check
-#==============================================================================
+###CHECK: MPI m-direction#####################################
+def m_mpi(mmpi, zb0, zbEnd, ny):
+    logger.info('MPI m-direction is called for')    
+    if mmpi > 1:
+        zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = midtrans(zb0, zbEnd, ny)
+        
+    #processing 
+    
+    #checking
+    
+    #HIER OOK NOG INBOUWEN DAT HIJ CHECKT OF MMPI>1, HIJ MOET ERGENS DAN OOK EEN WARNING GEVEN
+    else:
+        raise ValueError('mmpi>1 expected, got:', mmpi)
+    return check
     
 #==============================================================================
-# ###CHECK: MPI n-direction#####################################
-# def n_mpi():
-#     print('MPI n-direction')
-#     #processing
-#     
-#     #checking
-#     return check
+# #==============================================================================
+# # ###CHECK: MPI n-direction#####################################
+#  def n_mpi(nmpi, zb0, zbEnd, ny):
+#      logger.info('MPI n-direction is called for')    
+#      if nmpi > 1:
+#      #processing
+#      
+#      #checking
+#      else:
+#          raise ValueError('ny>0 expected, got:', ny)
+#      return check
+# #==============================================================================
+# 
 #==============================================================================
+###CHECK: WAVE BOUNDARY CONDITIONS
+def wave_generation(H, ue, ve, ui, vi, xloc):     #    Kijken of er H, ue, ve, ui, vi aangemaakt worden
+    #processing
+    
+#    xloc = x grid cell waar je wilt kijken of er golven gegenereet worden
+#    voor offshore kant doe je hem dan een keer met xloc = 0, en ook een keer met xloc = ... (iets voor de kust)
+    
+    Hmean = np.mean(H[:,:,xloc])  #[time, y, x]
+    uemean = np.mean(ue[:,:,xloc]) #--> kijk hier alleen 
+    vemean = np.mean(ve[:,:,xloc])
+    if xloc == 0:
+        uimean = np.mean(ui[:,:,xloc])
+        vimean = np.mean(vi[:,:,xloc])
+    else:
+        print('ui and vi can only be checked at the offshore boundary grid cells for xloc==0, got xloc= %s', xloc)
+        uimean = 0
+        vimean = 0
+    #checking
+    if Hmean == 0:  #of <0.0001 ?
+        logger.debug('error Hmean ==0')
+        check = 0.5
+    elif uemean == 0:  #of <0.0001 ?
+        logger.debug('error uemean ==0')
+        check = 0.5
+    elif vemean == 0:  #of <0.0001 ?
+        logger.debug('error vumean ==0')
+        check = 0.5
+    elif uimean == 0:  #of <0.0001 ?
+        logger.debug('error uimean ==0')
+        check = 0.5
+    elif vimean == 0:  #of <0.0001 ?
+        logger.debug('error vimean ==0')
+        check = 0.5
+    else:
+        logger.debug('H, ue, ve, ui and vi are >0 at xloc= %s', xloc)
+        check = 1
+#    print('Hmean=', Hmean)
+#    print('uemean=', uemean)
+#    print('vemean=', vemean)
+#    print('uimean=', uimean)
+#    print('vimean=', vimean)
+    
+    return check
+    
+###CHECK: Hrms DIFFERENCES ALONG Y AXIS
+def n_Hrms(H, ny):
+    
+    Hmean_all = np.mean(H[:,:,:])  #[time, y, x]
+    Hmean_ratio = np.zeros(len(ny))
+    for i in range(ny):
+        
+        Hmean_y = np.mean(H[:,i,:])
+        Hmean_ratio[i] = Hmean_y / Hmean_all
+        
+        if Hmean_ratio[i] > 0.4: #bijv 0.4 --> Hratioconstraint
+            logger.debug('error Hmean >0.4')
+            check = 0.5
+            
+        elif Hmean_ratio[i] <0.2:
+            logger.debug('error Hmean >0.4')
+            check = 0.5
+            
+        else:
+            check = 1
+    
+    return check, Hmean_ratio #om te plotten?
     
 #%%COMPARISON CHECKS###############################################
 #==============================================================================

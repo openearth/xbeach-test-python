@@ -13,29 +13,45 @@ logger.info("Opened database successfully")
 db = conn.cursor()
 
 def create_table():
-    db.execute('CREATE TABLE IF NOT EXISTS database(modules TEXT, tests TEXT, cases TEXT, runs TEXT, checks TEXT, value REAL)')
+    db.execute('CREATE TABLE IF NOT EXISTS database(modules TEXT, tests TEXT, cases TEXT, runs TEXT, checks TEXT, check REAL, massbalance REAL)')
              
  
 def data_entry(modules, tests, cases, runs, checks, value):
-    db.execute("INSERT INTO database(modules, tests, cases, runs, checks, value) VALUES (?, ?, ?, ?, ?, ?)",  #met SQL is de %s ipv ?
+    db.execute("INSERT INTO database(modules, tests, cases, runs, checks, check) VALUES (?, ?, ?, ?, ?, ?)",  #met SQL is de %s ipv ?
               (modules, tests, cases, runs, checks, value))
     conn.commit()  
     
+def massbalance_entry(modules, tests, cases, runs, checks, value, mass):
+    db.execute("INSERT INTO database(modules, tests, cases, runs, checks, value, massbalance) VALUES (?, ?, ?, ?, ?, ?,?)", 
+               (modules, tests, cases, runs, checks, value, mass))  #mass, ?
+    conn.commit()  
+    
 def read_zeros_from_db():      
-    db.execute('SELECT * FROM database WHERE value= 0')   #SELECT value FROM database WHERE value=1'
-    zeros = []
+    db.execute('SELECT * FROM database WHERE check= 0')   #SELECT value FROM database WHERE value=1'
+    zeros = dict()
+    i=0
     for row in db.fetchall():
+        i+=1
         logger.debug('Check=0 for: %s', row)  
-        zeros.extend(row)
+        zeros['zeros', i] = row
     return zeros
 
 def read_halfs_from_db():       
-    db.execute('SELECT * FROM database WHERE value= 0.5')   #SELECT value FROM database WHERE value=1'
-    halfs = []
+    db.execute('SELECT * FROM database WHERE check= 0.5')   #SELECT value FROM database WHERE value=1'
+    halfs = dict()
+    j=0
     for row in db.fetchall():
+        j+=1
         logger.debug('Check=0.5 for: %s', row)
-        halfs.extend(row)
+        halfs['halfs', j] = row
     return halfs
+
+#==============================================================================
+# def read_massbalance_from_db(): 
+#                                           #Wil je nog zo'n functie??
+#     
+#     return massbalance
+#==============================================================================
     
 def close_database():
     db.close()

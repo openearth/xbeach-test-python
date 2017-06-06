@@ -70,7 +70,7 @@ b = dict(shape = ['dune','dune','dune','dune','flat'],
 u = dict(diroutmain = diroutmain,           #!!!usercase/cases/morfaclist/dzmaxlist/zslist worden later hieraan toegevoegd
          module = 'Avalanching',
          tests = ['pos_x','neg_x','pos_y','neg_y','hor'],                                                                  
-         runs = ['benchmark','m1','m3','m3n1','m1n3','m3n3'],                   
+         runs = ['benchmark','m1','m3','m3n1','m1n3','m3n3'],  #BENCHMARK WEER m1n1 NOEMEN?                 
          waves = 'no',
          ow = [])            
                                                    
