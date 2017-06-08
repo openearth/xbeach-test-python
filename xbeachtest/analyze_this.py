@@ -135,6 +135,7 @@ for i in range(len(u['tests'])):
 #%%OUTPUT######################################################################
       
 #outside loop  -> the results should send error messages to the person responsible
+#--> This can also be done in a seperate script (especially if tests for other modules are added to the same database)
 #==============================================================================
 # zeros = database.read_zeros_from_db()   #NOG KIJKEN OF JE DIT ANDERS WILT
 # 

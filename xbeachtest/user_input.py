@@ -47,7 +47,7 @@ p = dict(
         dryslp = 1.0,                                                                  
         #output
         tintg = 100,  
-        tstop = 1800,    
+        tstop = 600,    
         nglobalvar = ['zb','zs']) 
 
 
@@ -56,7 +56,7 @@ p = dict(
 usermorfac = [10]                                                              
 userdzmax = [0.05]                                                              
 userzs0 = [-1, 45]
-tstoplong = 3600 
+tstoplong = 3000 
 
 
 ###DICTIONARY FOR BATHYMETRY INPUT###   

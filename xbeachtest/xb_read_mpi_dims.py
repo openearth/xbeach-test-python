@@ -5,7 +5,7 @@ import numpy as np
 import re
 
 def mpidims(dr):
-    with open(dr+'XBlog.txt','r') as f:       
+    with open(dr + 'XBlog.txt','r') as f:       
         lines = f.readlines()
     
     for i in range(len(lines)):    
@@ -24,7 +24,7 @@ def mpidims(dr):
         l = lines[iline].strip()
         ll = l.split('   ')
         dim.append(ll)
-        dims  =np.asarray(dim)
+        dims = np.asarray(dim)
         iline += 1
         
     return dims    

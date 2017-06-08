@@ -131,11 +131,11 @@ def m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, dr, mpicon, mpinr):                     
         slope_m = slope(zbEndtrans_m, dx, nx)
         mpidim = mpidims(dr)               
         locm2 = int(mpidim[:,1][mpinr]) + 3                                     #Note: The overlap of the mpi domains is 3 cells    
-        locm1 = locm2 - 4                                                       #You want locm1 to be before the MPI-boundary
+        locm1 = locm2 - 3                                                       #You want locm1 to be before the MPI-boundary
         zbEnd_locm2 = zbEndtrans_m[locm2]
         zbEnd_locm1 = zbEndtrans_m[locm1]
         deltareal_m= zbEnd_locm2 - zbEnd_locm1
-        deltatheory_m=slope_m[locm1-1] * (locm2 - locm1) * dx 
+        deltatheory_m=slope_m[locm1-0] * (locm2 - locm1) * dx 
         delta_m=abs(deltareal_m-deltatheory_m)
         
         #checking
@@ -159,11 +159,11 @@ def n_mpi(nmpi, zb0, zbEnd, dy, ny, dr, mpicon, mpinr):
         slope_n = slope(zbEndtrans_n, dy, ny)
         mpidim = mpidims(dr)               
         locn2 = int(mpidim[:,3][mpinr]) + 3                                             
-        locn1 = locn2 - 4                                                       
+        locn1 = locn2 - 3                                                       
         zbEnd_locn2 = zbEndtrans_n[locn2]
         zbEnd_locn1 = zbEndtrans_n[locn1]
         deltareal_n= zbEnd_locn2 - zbEnd_locn1
-        deltatheory_n=slope_n[locn1-1] * (locn2 - locn1) * dy
+        deltatheory_n=slope_n[locn1-0] * (locn2 - locn1) * dy
         delta_n=abs(deltareal_n-deltatheory_n)
         
         #checking
