@@ -1,6 +1,8 @@
 #'XBeach Diagnostic Test Model Generator'
 # Making bathymetry profiles
 
+#%%GENERAL#####################################################################
+
 import numpy as np
 from xbeachtools import XBeachBathymetry
 import logging
@@ -8,12 +10,14 @@ import logging
 logger = logging.getLogger(__name__)
 logger.info('bathy.py is called for')
 
+#%%BATHYMETRY CLASS CONTAINING ALL BUILDING BLOCKS AND PROFILES################
+
 class Bathymetry(XBeachBathymetry):  
     def __init__(self, dx= 1, dy= 1, width= 100, dunewidth=25, shorewidth= 75, length= 0, height= 0, slope = 1, duneslope= 1, D50= 200e-6, m= 0.67, s= 1.6, v= 1e-6, **kwargs):  
     
-        self.x = None #x = None
-        self.y = None #y = None
-        self.z = None #z = None
+        self.x = None 
+        self.y = None 
+        self.z = None 
         
         self.dx = dx
         self.dy = dy
@@ -29,7 +33,7 @@ class Bathymetry(XBeachBathymetry):
         self.s = s
         self.v = v        
     
-    ### GENERAL BUILDING BLOCKS###
+### GENERAL BUILDING BLOCKS###
     def dean(self):     
         logger.debug('dean profile is called for')    
         x = np.arange(-self.width, 0, self.dx)
@@ -58,7 +62,7 @@ class Bathymetry(XBeachBathymetry):
         Z = np.tile(z, (len(y),1))              
         return X, Y, Z
     
-    ###SPECIFIC BATHYMETRY PROFILES###
+###SPECIFIC BATHYMETRY PROFILES###
     def dune_1d(self, **kwargs):               
         logger.debug('dune_1d is called for')
         self.width = self.shorewidth
@@ -89,9 +93,3 @@ class Bathymetry(XBeachBathymetry):
         logger.debug('flat_2d is called for')
         self.flat_1d()
         self.x, self.y, self.z = self.yuniform(self.x, self.z)
-
-#TO DO:    
-
-#moeten hier dan nog dingen als asarray en reshape gebeuren als in xbeach.py??? --> omdat je het nu als XBeachBathymetry object uitgeeft
-    #dit lijkt nog niet goed te gaan
-#        super(Bathymetry, self).__init__()  nodig?

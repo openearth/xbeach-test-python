@@ -1,16 +1,21 @@
+#'XBeach Diagnostic Test Model Generator'
+# Creating the input files and folder structures
+
 #%%GENERAL#####################################################################
-from xbeachtools import XBeachModel
-from xbeachtools import XBeachBathymetry
-import os 
-import logging
+
 import json
+import logging
+import os 
 from bathy import Bathymetry
 from user_input import b,p,u
+from xbeachtools import XBeachModel
+from xbeachtools import XBeachBathymetry
 
 logger = logging.getLogger(__name__)
 logger.info('setup.py is called for')
 
 #%%MAKING THE FOLDER STRUCTURE#################################################
+
 ###MODULES###
 logger.info( u['module'])
 
@@ -59,7 +64,7 @@ for i in range(len(u['tests'])):
                 p['nmpi'] = 3
                 shell = 'mpirun -n 10 xbeach'
                         
-            #%%MAKING THE PARAMS.TXT FILES###
+###MAKING THE BATHYMETRIES AND CREATING THE XBEACH INPUT FILES###
             xb = XBeachModel(**p)  
             bathy = Bathymetry(**b, **p)
                          
@@ -92,13 +97,14 @@ for i in range(len(u['tests'])):
                     XBbathy.mirror()
                     XBbathy.turn()
             
-            xb['bathymetry'] = XBbathy   #BYPASSEN VAN xb.set_bathymetry
+            xb['bathymetry'] = XBbathy                                          #bypassing xb.set_bathymetry
 
             if u['waves'] in ['yes']:
                 xb.set_waves(u['ow']) 
             
             xb.write(path)   
-                        
+            
+            #making shell executable:            
             os.chdir(path)            
-            with open('run.sh', 'w') as f:  #making shell executable
+            with open('run.sh', 'w') as f:  
                 json.dump(shell, f, indent=4)

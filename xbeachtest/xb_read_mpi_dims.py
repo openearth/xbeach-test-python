@@ -1,35 +1,12 @@
 #Python version of Matlab OET script: xb_read_mpi_dims.m
-#Note that the input is not fully checked as in the Matlab script
+    #Note that the input is not fully checked as in the Matlab script
 
-import re
 import numpy as np
-    
-#==============================================================================
-# Input:
-#    dr  = Directory where the XBlog file resides
-# 
-#    Output:
-#    dims = the n * 5 matrix included in the XBlog file that describes the
-#            mpi domain dimensions in which:
-#                First column:  domain number
-#                Second column: position of the left boundary in m direction (cross-shore)
-#                Third column:  Length of the domain in m direction (cross-shore)
-#                Fourth column: position of upper boundary in n direction (alongshore)
-#                Third column:  Length of the domain in n direction (alongshore)
-# 
-#            For example:
-#                     0    1  107    1   63
-#                     1  106  106    1   63
-#                     2  210  106    1   63
-#                     3    1  107   62   62
-#                     4  106  106   62   62
-#                     5  210  106   62   62
-# 
-#==============================================================================
+import re
 
 def mpidims(dr):
     with open(dr+'XBlog.txt','r') as f:       
-        lines = f.readlines()#[31:]
+        lines = f.readlines()
     
     for i in range(len(lines)):    
         line = lines[i].strip()
