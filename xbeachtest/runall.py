@@ -14,11 +14,11 @@ def runall():
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(HOSTNAME, PORT, USERNAME, PASSWORD)
-    cmd = 'find %s -name run.sh | awk \'{print "qsub \""$1"\""}\' | /bin/bash' % RUNDIR
-    print("##teamcity[message '%s']" % cmd)
+    cmd = 'find %s -name run.sh | awk \'{print "qsub \\""$1"\\""}\' | /bin/bash' % RUNDIR
+    print(cmd) #"##teamcity[message '%s']" % cmd)
     stdin, stdout, stderr = ssh.exec_command(cmd)
     for line in stdout.readlines():
-        print("##teamcity[message '%s']" % line)
+        print(line) #"##teamcity[message '%s']" % line)
     ssh.close()
 
     
