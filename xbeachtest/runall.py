@@ -6,7 +6,7 @@ import paramiko
 HOSTNAME = 'h6'
 PORT = 22
 USERNAME = os.getenv('XBEACH_USER')
-PASSWORD = os.getenv'XBEACH_PASS')
+PASSWORD = os.getenv('XBEACH_PASS')
 
 def runall():
     s = paramiko.SSHClient()
