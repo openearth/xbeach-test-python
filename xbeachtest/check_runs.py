@@ -13,6 +13,10 @@ def check_runs():
     starttime = time.mktime(time.localtime());
     currenttime = time.mktime(time.localtime());
 
+    print(maxtime)
+    print(starttime)
+    print(currenttime)
+    
     while not is_finished() and currenttime < starttime + maxtime:
         time.sleep(30)
         print('DEBUG: Still running (%s min, max = %s min)'%((currenttime-starttime)/60,maxtime/60))
