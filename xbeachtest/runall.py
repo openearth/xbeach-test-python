@@ -10,16 +10,17 @@ PASSWORD = os.getenv('XBEACH_PASS')
 RUNDIR = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION_UNIX')
 
 def runall():
-    s = paramiko.SSHClient()
-    s.load_system_host_keys()
-    s.connect(HOSTNAME, PORT, USERNAME, PASSWORD)
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(HOSTNAME, PORT, USERNAME, PASSWORD)
     cmd = 'find %s -name run.sh | awk \'{print "qsub \""$1"\""}\' | /bin/bash' % RUNDIR
-    print "##teamcity[message '%s']" % cmd
-    stdin, stdout, stderr = s.exec_command(cmd)
+    print("##teamcity[message '%s']" % cmd)
+    stdin, stdout, stderr = ssh.exec_command(cmd)
     for line in stdout.readlines():
-        print "##teamcity[message '%s']" % line
-    s.close()
+        print("##teamcity[message '%s']" % line)
+    ssh.close()
 
     
-if __name__ == "main":
+if __name__ == "__main__':
     runall()
