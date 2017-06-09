@@ -10,9 +10,16 @@ def clean_cluster_jobs():
     USERNAME = os.getenv('XBEACH_USER')
     PASSWORD = os.getenv('XBEACH_PASS')
     
-    ssh = _connect(HOSTNAME, port=PORT, username=USERNAME, password=PASSWORD)
+    ssh = paramiko.SSHClient()
+    ssh.load_system_host_keys()
+    ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
+    ssh.connect(HOSTNAME, PORT, USERNAME, PASSWORD)
+    
     project_id = os.getenv('XBEACH_PROJECT_ID_4_LETTER')
-    for line in _shell_execute(ssh, 'qstat -u %s' % USERNAME):
+    cmd = 'qstat -u %s' % USERNAME
+    
+    stdin, stdout, stderr = ssh.exec_command(cmd)
+    for line in stdout.readlines():
         logging.debug(line)
         m = re.match('.*%s.*xbeach\s+E\s+.*|.*%s.*xbeach\s+dt\s+.*|.*%s.*xbeach\s+t\s+.*|.*%s.*xbeach\s+Eqw\s+.*|.*%s.*xbeach\s+dr\s+.*' % (project_id,project_id,project_id,project_id,project_id), line)
         if m:
@@ -24,7 +31,6 @@ def clean_cluster_jobs():
                 for li in _shell_execute(ssh, 'qdel -f %d && exit' % (jobid)):
                     logging.info("%s" % li)
                 logging.info("Deleting job: %d" % jobid)
-        
     ssh.close()
     
 if __name__ == '__main__':
