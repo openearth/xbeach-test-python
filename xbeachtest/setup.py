@@ -41,7 +41,11 @@ for i in range(len(u['tests'])):
         for k in range(len(runs)):
             logger.debug(runs[k])
             
-            path = (u['diroutmain']   + u['module'] + '/' + u['tests'][i] + '/' + u['cases'][j] + '/' + runs[k] + '/')
+            path = os.path.join(u['diroutmain'],
+                                u['module'],
+                                u['tests'][i],
+                                u['cases'][j],
+                                runs[k])
             if not os.path.exists(path):
                 os.makedirs(path)     
             
@@ -108,10 +112,9 @@ for i in range(len(u['tests'])):
             xb.write(path)   
             
             #making shell executable:            
-            os.chdir(path)       
             nodes = np.ceil(nprocesses/4.)
             fname = 'XBdiagnostic'
-            with open('run.sh', 'w') as fp  :
+            with open(os.path.join(path, 'run.sh'), 'w') as fp  :
                 fp.write('#!/bin/sh\n')
                 fp.write('#$ -cwd\n')
                 fp.write('#$ -j yes\n')
