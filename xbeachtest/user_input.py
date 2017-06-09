@@ -139,14 +139,14 @@ c = dict(
 
 #%%MAKING THE DICTIONARY TEXT FILES############################################ 
 
-with open('Bdictionary.txt', 'w') as f:
+with open(os.path.join(diroutmain,'Bdictionary.txt'), 'w') as f: 
     json.dump(b, f, indent=4)
 
-with open('Cdictionary.txt', 'w') as f:
+with open(os.path.join(diroutmain,'Cdictionary.txt'), 'w') as f:
     json.dump(c, f, indent=4)
 
-with open('Pdictionary.txt', 'w') as f:
+with open(os.path.join(diroutmain,'Pdictionary.txt'), 'w') as f:
     json.dump(p, f, indent=4)
     
-with open('Udictionary.txt', 'w') as f:
+with open(os.path.join(diroutmain,'Udictionary.txt'), 'w') as f:
     json.dump(u, f, indent=4)  

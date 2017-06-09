@@ -13,7 +13,10 @@ import checks
 logger = logging.getLogger(__name__)
 logger.info('analyze_this.py is called for')
 
-#Open dictionaries from test-files:    
+#Open dictionaries from test-files:
+diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
+os.chdir(diroutmain)    
+
 with open('Bdictionary.txt', 'r') as f:
     b = json.load(f)    
 if b == None:
@@ -55,10 +58,16 @@ for i in range(len(u['tests'])):
         zbEndtrans_n_list = []
         
         for k in range(len(runs)):            
-            path = (u['diroutmain']   + u['module'] + '/' + u['tests'][i] + '/' + u['cases'][j] + '/' + runs[k] + '/')
+            path = os.path.join(u['diroutmain'],
+                                u['module'],
+                                u['tests'][i],
+                                u['cases'][j],
+                                runs[k])
+            if not os.path.exists(path):
+                raise ValueError('There is no path named: %s', path) 
             logger.info(path)
-            os.chdir(path) 
-                 
+            os.chdir(path)     
+            
 ###READ XBEACH OUTPUT FILES###       
             fname = path + 'xboutput.nc'
 
