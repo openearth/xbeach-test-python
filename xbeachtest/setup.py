@@ -3,9 +3,9 @@
 
 #%%GENERAL#####################################################################
 
-import json
 import logging
 import os 
+import numpy as np
 from bathy import Bathymetry
 from user_input import b,p,u
 from xbeachtools import XBeachModel
@@ -47,22 +47,22 @@ for i in range(len(u['tests'])):
             if runs[k] in ['m1','benchmark']:   
                 p['mmpi']  = 1
                 p['nmpi'] = 1
-                shell = 'xbeach'
+                nprocesses = 1
                 
             elif runs[k] in ['m3', 'm3n1']:
                 p['mmpi']  = 3
                 p['nmpi'] = 1
-                shell = 'mpirun -n 4 xbeach'
+                nprocesses = 3
                 
             elif runs[k] in ['m1n3']:
                 p['mmpi']  = 1
                 p['nmpi'] = 3
-                shell = 'mpirun -n 4 xbeach'
+                nprocesses = 3
                 
             elif runs[k] in ['m3n3']:
                 p['mmpi']  = 3
                 p['nmpi'] = 3
-                shell = 'mpirun -n 10 xbeach'
+                nprocesses = 9
                         
 ###MAKING THE BATHYMETRIES AND CREATING THE XBEACH INPUT FILES###
             xb = XBeachModel(**p)  
@@ -105,6 +105,33 @@ for i in range(len(u['tests'])):
             xb.write(path)   
             
             #making shell executable:            
-            os.chdir(path)            
-            with open('run.sh', 'w') as f:  
-                json.dump(shell, f, indent=4)
+            os.chdir(path)       
+            nodes = np.ceil(nprocesses/4.)
+            fname = 'XBdiagnostic'
+            with open('run.sh', 'w') as fp  :
+                fp.write('#!/bin/sh\n')
+                fp.write('#$ -cwd\n')
+                fp.write('#$ -j yes\n')
+                fp.write('#$ -V\n')
+                fp.write('#$ -N %s\n' % fname)
+                fp.write('#$ -q normal-e3\n')
+                fp.write('#$ -pe distrib %d\n\n' % nodes)
+        
+                fp.write('hostFile="$JOB_NAME.h$JOB_ID"\n')
+                fp.write('cat $PE_HOSTFILE | while read line; do\n')
+                fp.write("""   echo $line | awk '{print $1 " slots=" $4}'\n""")
+                fp.write('done > $hostFile\n\n')
+                
+                fp.write('module purge\n')
+                fp.write('module load gcc/4.9.2\n')
+                fp.write('module load hdf5/1.8.14_gcc_4.9.2\n')
+                fp.write('module load netcdf/v4.3.2_v4.4.0_gcc_4.9.2\n')
+                fp.write('module load openmpi/1.8.3_gcc_4.9.2\n')
+                fp.write('module load /opt/xbeach/modules/xbeach-%s_gcc_4.9.2_1.8.3_HEAD\n\n' % (os.getenv('XBEACH_PROJECT_ID')))
+                fp.write('module list\n\n')
+                
+                fp.write('mpirun -report-bindings -np %d -map-by core -hostfile $hostFile xbeach\n\n' % (nprocesses+1))
+                fp.write('rm -f $hostFile\n')
+                fp.write('mpdallexit\n')
+                
+                
