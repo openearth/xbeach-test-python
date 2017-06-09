@@ -3,8 +3,8 @@
 import os
 import paramiko
 
-HOSTNAME = 'h6'
-PORT = 22
+HOSTNAME = os.getenv('CLUSTER_HOSTNAME')
+PORT = os.getenv('CLUSTER_PORT')
 USERNAME = os.getenv('XBEACH_USER')
 PASSWORD = os.getenv('XBEACH_PASS')
 RUNDIR = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION_UNIX')
