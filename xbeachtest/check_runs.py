@@ -9,7 +9,7 @@ def check_runs():
     # allow the runs to appear in the Linux queue before checking whether they are done
     time.sleep(15)
 
-    maxtime = float(os.getenv('XBEACH_DIAGNOSTIC_MAX_RUNTIME_HRS'));
+    maxtime = 60*24*float(os.getenv('XBEACH_DIAGNOSTIC_MAX_RUNTIME_HRS'));
     starttime = time.mktime(time.localtime());
     currenttime = time.mktime(time.localtime());
 
