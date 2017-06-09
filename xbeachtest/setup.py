@@ -123,10 +123,10 @@ for i in range(len(u['tests'])):
                 fp.write('#$ -q normal-e3\n')
                 fp.write('#$ -pe distrib %d\n\n' % nodes)
         
-                fp.write('hostFile="$JOB_NAME.h$JOB_ID"\n')
-                fp.write('cat $PE_HOSTFILE | while read line; do\n')
-                fp.write("""   echo $line | awk '{print $1 " slots=" $4}'\n""")
-                fp.write('done > $hostFile\n\n')
+#                fp.write('hostFile="$JOB_NAME.h$JOB_ID"\n')
+#                fp.write('cat $PE_HOSTFILE | while read line; do\n')
+#                fp.write("""   echo $line | awk '{print $1 " slots=" $4}'\n""")
+#                fp.write('done > $hostFile\n\n')
                 
                 fp.write('module purge\n')
                 fp.write('module load gcc/4.9.2\n')
@@ -136,8 +136,9 @@ for i in range(len(u['tests'])):
                 fp.write('module load /opt/xbeach/modules/xbeach-%s_gcc_4.9.2_1.8.3_HEAD\n\n' % (os.getenv('XBEACH_PROJECT_ID')))
                 fp.write('module list\n\n')
                 
-                fp.write('mpirun -report-bindings -np %d -map-by core -hostfile $hostFile xbeach\n\n' % (nprocesses+1))
-                fp.write('rm -f $hostFile\n')
+                fp.write('mpirun -report-bindings -np %d -map-by core xbeach\n\n' % (nprocesses+1))
+#                fp.write('mpirun -report-bindings -np %d -map-by core -hostfile $hostFile xbeach\n\n' % (nprocesses+1))
+#                fp.write('rm -f $hostFile\n')
                 fp.write('mpdallexit\n')
                 
                 
