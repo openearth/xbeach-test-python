@@ -65,8 +65,10 @@ for i in range(len(u['tests'])):
                 nprocesses = 9
                         
 ###MAKING THE BATHYMETRIES AND CREATING THE XBEACH INPUT FILES###
-            xb = XBeachModel(**p)  
-            bathy = Bathymetry(**b, **p)
+            xb = XBeachModel(**p)
+            bp = b.copy()
+            bp.update(p)
+            bathy = Bathymetry(**bp)
                          
             if runs[k] in ['m1','m3']:
                 if b['shape'][i] in ['flat']: 
