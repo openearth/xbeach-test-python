@@ -15,7 +15,7 @@ def check_runs():
         print('DEBUG: Still running (%s min, max = %s min)'%((currenttime-starttime)/60,maxtime/60))
         currenttime = time.mktime(time.localtime());
         
-def is_finished()
+def is_finished():
     HOSTNAME = os.getenv('CLUSTER_HOSTNAME')
     PORT = int(os.getenv('CLUSTER_PORT'))
     USERNAME = os.getenv('XBEACH_USER')
