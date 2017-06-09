@@ -42,7 +42,8 @@ for i in range(len(u['tests'])):
             logger.debug(runs[k])
             
             path = (u['diroutmain']   + u['module'] + '/' + u['tests'][i] + '/' + u['cases'][j] + '/' + runs[k] + '/')
-            os.makedirs(path, exist_ok=False)     
+            if not os.path.exists(path):
+                os.makedirs(path)     
             
             if runs[k] in ['m1','benchmark']:   
                 p['mmpi']  = 1
