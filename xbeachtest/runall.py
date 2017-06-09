@@ -4,7 +4,7 @@ import os
 import paramiko
 
 HOSTNAME = os.getenv('CLUSTER_HOSTNAME')
-PORT = os.getenv('CLUSTER_PORT')
+PORT = int(os.getenv('CLUSTER_PORT'))
 USERNAME = os.getenv('XBEACH_USER')
 PASSWORD = os.getenv('XBEACH_PASS')
 RUNDIR = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION_UNIX')
