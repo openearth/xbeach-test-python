@@ -10,7 +10,7 @@ logging.basicConfig(filename='xbeachtest-logfile.log', format='%(asctime)-15s %(
 logger = logging.getLogger(__name__)
 logger.info('user_input.py is called for') 
 
-diroutmain = "C:/Users/Leijnse/Desktop/Checkouts/openearth/xbeach-test-python/xbeachtest/" #including / at the end
+diroutmain = "p:/xbeach/skillbed/diagnostic/" #including / at the end
 
 #%%INPUT FOR SETUP OF MODELS###################################################
 
