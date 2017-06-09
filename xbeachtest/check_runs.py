@@ -2,6 +2,7 @@ import os
 import time
 import paramiko
 import re
+import logging
 
 
 def check_runs():
