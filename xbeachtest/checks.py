@@ -20,11 +20,11 @@ def bedlevelchange(zb0, zbEnd):
     zbDelta=np.mean(abs(zbEnd - zb0))
     
     #checking
-    if zbDelta>0:
-        check = 1                                                               #check=1 means result is satisfactory
+    if zbDelta > 0:
+        check = 0                                                               #check=1 means result is satisfactory
         logger.debug('check= %s', check) 
     else:
-        check = 0.5                                                             #check=0.5 means test has run but result is unsatisfactory
+        check = 1                                                             #check=0.5 means test has run but result is unsatisfactory
         logger.debug('check= %s --> mean of delta zb = 0', check)
     return check
     
@@ -40,13 +40,13 @@ def massbalance(zb0, zbEnd, dx, dy, massbalancecon):
     
     #checking
     if massbalance > massbalancecon:
-        check = 0.5
+        check = 1
         logger.debug('check= %s --> too much mass entering the model', check)              
     elif massbalance < massbalancecon:
-        check = 0.5
+        check = 1
         logger.debug('check= %s --> too much mass leaving the model', check)  
     else:
-        check = 1           
+        check = 0           
     return check, massbalance    
         
 #%%CHECKS OVER MIDDLE TRANSECT#################################################  
@@ -87,13 +87,13 @@ def m_slope(zb0, zbEnd, nx, ny, dx, slploc, slptheo, slpcon):
     #checking    
     for b in range(len(slploc)):
         if slope_m[slploc[b]] > slptheo[b]*(1+slpcon):         
-            check = 0.5
+            check = 1
             logger.debug('check= %s --> slope %s > theoretical slope %s', check, slope_m[slploc[b]], slptheo[b] * (1+slpcon))
         elif slope_m[slploc[b]] < slptheo[b]*(1-slpcon):  
-            check = 0.5
+            check = 1
             logger.debug('check= %s --> slope %s < theoretical slope %s', check, slope_m[slploc[b]], slptheo[b] * (1-slpcon))
         else:
-            check = 1                   
+            check = 0                   
             logger.debug('check= %s', check)
     return check
 
@@ -109,13 +109,13 @@ def n_slope(zb0, zbEnd, nx, ny, dy, slploc, slptheo, slpcon):
         #checking                          
         for b in range(len(slploc)):
             if slope_n[slploc[b]] > slptheo[b] * (1 + slpcon):         
-                check = 0.5
+                check = 1
                 logger.debug('check= %s --> slope %s > theoretical slope %s', check, slope_n[slploc[b]] , slptheo[b] * (1 + slpcon))
             elif slope_n[slploc[b]] < slptheo[b] * (1 - slpcon):
-                check = 0.5
+                check = 1
                 logger.debug('check= %s --> slope %s < theoretical slope %s', check, slope_n[slploc[b]] , slptheo[b] * (1 - slpcon))
             else:
-                check = 1                   
+                check = 0                   
                 logger.debug('check= %s', check)     
     else:
         raise ValueError('ny>0 expected, got:', ny)
@@ -140,10 +140,10 @@ def m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, dr, mpicon, mpinr):                     
         
         #checking
         if delta_m > mpicon:
-            check = 0.5
+            check = 1
             logger.debug('check= %s --> delta_m %s > mpiconstraint %s', check, delta_m, mpicon)            
         else:
-            check = 1
+            check = 0
             logger.debug('check= %s', check)                   
     else:
         raise ValueError('mmpi>1 expected, got:', mmpi)
@@ -168,10 +168,10 @@ def n_mpi(nmpi, zb0, zbEnd, dy, ny, dr, mpicon, mpinr):
         
         #checking
         if delta_n > mpicon:
-            check = 0.5
+            check = 1
             logger.debug('check= %s --> delta_n %s > mpiconstraint %s', check, delta_n, mpicon)            
         else:
-            check = 1  
+            check = 0  
             logger.debug('check= %s', check)                 
     else:
         raise ValueError('nmpi>1 expected, got:', nmpi)
@@ -186,10 +186,10 @@ def rmse_comp(zbEndbench, zbEnd, ny, rmsecon):
 
     #checking
     if rmse > rmsecon:
-        check = 0.5
+        check = 1
         logger.debug('check= %s --> rmse %s > rmseconstraint %s', check, rmse, rmsecon)
     else:
-        check = 1
+        check = 0
         logger.debug('check= %s', check)
     return check   
 
@@ -214,22 +214,22 @@ def wave_generation(H, ue, ve, ui, vi, xloc):     #    Checken of er H, ue, ve, 
     #checking
     if Hmean == 0:  #of overal <0.0001 ?
         logger.debug('error Hmean ==0')
-        check = 0.5
+        check = 1
     elif uemean == 0: 
         logger.debug('error uemean ==0')
-        check = 0.5
+        check = 1
     elif vemean == 0:  
         logger.debug('error vumean ==0')
-        check = 0.5
+        check = 1
     elif uimean == 0: 
         logger.debug('error uimean ==0')
-        check = 0.5
+        check = 1
     elif vimean == 0: 
         logger.debug('error vimean ==0')
-        check = 0.5
+        check = 1
     else:
         logger.debug('H, ue, ve, ui and vi are >0 at xloc= %s', xloc)
-        check = 1
+        check = 0
     return check
     
 ###CHECK: Hrms DIFFERENCES ALONG Y AXIS
@@ -246,11 +246,11 @@ def n_Hrms(H, ny):
     #checking
         if Hmean_ratio[i] > 0.4: #bijv 0.4 --> constraint aanmaken
             logger.debug('error Hmean >0.4')
-            check = 0.5            
+            check = 1            
         elif Hmean_ratio[i] <0.2:
             logger.debug('error Hmean >0.4')
-            check = 0.5            
+            check = 1            
         else:
-            check = 1
+            check = 0
     
     return check, Hmean_ratio #Hmean_ratio --> usefull to make a plot of?

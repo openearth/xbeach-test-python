@@ -122,7 +122,7 @@ for i in range(len(u['tests'])):
                     check = checks.rmse_comp(zbEndtrans_n_list[0],zbEndtrans_n_list[k], ny, c['rmsecon'])   
                     
                 else:
-                    check = 0
+                    check = 2
                 
                 #WRITE CHECK TO DATABASE 
                 if checklist[l] in ['massbalance']: 
