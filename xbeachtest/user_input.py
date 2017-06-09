@@ -5,12 +5,13 @@
 
 import json
 import logging
+import os
 
 logging.basicConfig(filename='xbeachtest-logfile.log', format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.INFO) #.DEBUG)    
 logger = logging.getLogger(__name__)
 logger.info('user_input.py is called for') 
 
-diroutmain = "p:/xbeach/skillbed/diagnostic/" #including / at the end
+diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 
 #%%INPUT FOR SETUP OF MODELS###################################################
 
