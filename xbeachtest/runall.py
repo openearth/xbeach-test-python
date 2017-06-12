@@ -14,7 +14,7 @@ def runall():
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(HOSTNAME, PORT, USERNAME, PASSWORD)
-    cmd = 'find %s -name run.sh | awk \'{print "qsub \\""$1"\\""}\' | /bin/bash' % RUNDIR
+    cmd = 'find %s -name run.sh | awk \'{print "cd %s && dos2unix \\""$1"\\" && qsub \\""$1"\\" && cd -"}\' | /bin/bash' % RUNDIR
     print(cmd) #"##teamcity[message '%s']" % cmd)
     stdin, stdout, stderr = ssh.exec_command(cmd)
     for line in stdout.readlines():
