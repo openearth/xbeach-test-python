@@ -14,12 +14,11 @@ def clean_cluster_jobs():
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(HOSTNAME, PORT, USERNAME, PASSWORD)
-    print(ssh)
+
     cmd = 'qstat -u %s' % USERNAME
     
     stdin, stdout, stderr = ssh.exec_command(cmd)
     for line in stdout.readlines():
-        print(line)
         logging.debug(line)
         m = re.match('.*%s.*xbeach\s+E\s+.*|.*%s.*xbeach\s+dt\s+.*|.*%s.*xbeach\s+t\s+.*|.*%s.*xbeach\s+Eqw\s+.*|.*%s.*xbeach\s+dr\s+.*|.*%s.*xbeach\s+r\s+.*|.*%s.*xbeach\s+qw\s+.*' % (project_id,project_id,project_id,project_id,project_id,project_id,project_id), line)
         if m:
@@ -28,10 +27,9 @@ def clean_cluster_jobs():
             if not jobid:
                 logging.info("No jobs found.")
             else:
-                cmd_del = 'qdel -f %d' % (jobid)
+                cmd_del = 'qdel %d' % (jobid)
                 stdin_del, stdout_del, stderr_del = ssh.exec_command(cmd_del)
                 for li in stdout_del.readlines():
-                    print(li)
                     logging.info("%s" % li)
                 logging.info("Deleting job: %d" % jobid)
     ssh.close()
