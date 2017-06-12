@@ -21,7 +21,7 @@ def clean_cluster_jobs():
     stdin, stdout, stderr = ssh.exec_command(cmd)
     for line in stdout.readlines():
         logging.debug(line)
-        m = re.match('.*%s.*xbeach\s+E\s+.*|.*%s.*xbeach\s+dt\s+.*|.*%s.*xbeach\s+t\s+.*|.*%s.*xbeach\s+Eqw\s+.*|.*%s.*xbeach\s+dr\s+.*|.*%s.*xbeach\s+r\s+.*|.*%s.*xbeach\s+qw\s+.*' % (project_id,project_id,project_id,project_id,project_id), line)
+        m = re.match('.*%s.*xbeach\s+E\s+.*|.*%s.*xbeach\s+dt\s+.*|.*%s.*xbeach\s+t\s+.*|.*%s.*xbeach\s+Eqw\s+.*|.*%s.*xbeach\s+dr\s+.*|.*%s.*xbeach\s+r\s+.*|.*%s.*xbeach\s+qw\s+.*' % (project_id,project_id,project_id,project_id,project_id,project_id,project_id), line)
         if m:
             m2 = re.search('\s+(\d+)\s+0\.',line)
             jobid = int(m2.group(1))
