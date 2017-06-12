@@ -3,19 +3,18 @@ import os
 import paramiko
 import logging
 
+HOSTNAME = os.getenv('CLUSTER_HOSTNAME')
+PORT = int(os.getenv('CLUSTER_PORT'))
+USERNAME = os.getenv('XBEACH_USER')
+PASSWORD = os.getenv('XBEACH_PASS')
+project_id = os.getenv('XBEACH_PROJECT_ID_4_LETTER')
+
 def clean_cluster_jobs():
-    
-    HOSTNAME = os.getenv('CLUSTER_HOSTNAME')
-    PORT = int(os.getenv('CLUSTER_PORT'))
-    USERNAME = os.getenv('XBEACH_USER')
-    PASSWORD = os.getenv('XBEACH_PASS')
-    
     ssh = paramiko.SSHClient()
     ssh.load_system_host_keys()
     ssh.set_missing_host_key_policy(paramiko.AutoAddPolicy())
     ssh.connect(HOSTNAME, PORT, USERNAME, PASSWORD)
-    
-    project_id = os.getenv('XBEACH_PROJECT_ID_4_LETTER')
+    print(ssh)
     cmd = 'qstat -u %s' % USERNAME
     
     stdin, stdout, stderr = ssh.exec_command(cmd)
