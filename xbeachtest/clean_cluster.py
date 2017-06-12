@@ -28,7 +28,7 @@ def clean_cluster_jobs():
             if not jobid:
                 logging.info("No jobs found.")
             else:
-                cmd_del = 'qdel -f %d && exit' % (jobid)
+                cmd_del = 'qdel -f %d' % (jobid)
                 stdin_del, stdout_del, stderr_del = ssh.exec_command(cmd_del, timeout=5)
                 for li in stdout_del.readlines():
                     print(li)
