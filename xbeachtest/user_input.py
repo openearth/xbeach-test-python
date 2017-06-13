@@ -141,14 +141,14 @@ c = dict(
 
 #%%MAKING THE DICTIONARY TEXT FILES############################################ 
 
-with open(os.path.join(diroutmain, u['module'], 'dictB_avalanching.txt'), 'w') as f: 
+with open(os.path.join(diroutmain, 'dictB_avalanching.txt'), 'w') as f: 
     json.dump(b, f, indent=4)
 
-with open(os.path.join(diroutmain, u['module'], 'dictC_avalanching.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictC_avalanching.txt'), 'w') as f:
     json.dump(c, f, indent=4)
 
-with open(os.path.join(diroutmain, u['module'], 'dictP_avalanching.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictP_avalanching.txt'), 'w') as f:
     json.dump(p, f, indent=4)
     
-with open(os.path.join(diroutmain, u['module'], 'dictU_avalanching.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictU_avalanching.txt'), 'w') as f:
     json.dump(u, f, indent=4)  
