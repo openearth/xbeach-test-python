@@ -5,7 +5,6 @@
 
 import logging
 import os 
-import posixpath
 import numpy as np
 from bathy import Bathymetry
 from user_input import b, p, u
@@ -47,12 +46,7 @@ for i in range(len(u['tests'])):
                                 u['tests'][i],
                                 u['cases'][j],
                                 runs[k])
-            # Also create a unix compatible path to use in .sh script
-            unixpath = posixpath.join(os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION_UNIX'),
-                                u['module'],
-                                u['tests'][i],
-                                u['cases'][j],
-                                runs[k])
+
             if not os.path.exists(path):
                 os.makedirs(path)     
             
@@ -138,4 +132,4 @@ for i in range(len(u['tests'])):
                 fp.write('module load /opt/xbeach/modules/xbeach-%s_gcc_4.9.2_1.8.3_HEAD\n\n' % (os.getenv('XBEACH_PROJECT_ID')))
                 fp.write('module list\n\n')
                                 
-                fp.write('mpirun -report-bindings -np %d -map-by core -wdir %s xbeach\n\n' % (nprocesses+1, unixpath))
+                fp.write('mpirun -report-bindings -np %d -map-by core xbeach\n\n' % (nprocesses+1))
