@@ -6,8 +6,8 @@
 Welcome to xbeachtest's documentation!
 ======================================
 
-'xbeachtest' is the project where diagnostic tests are created to test the process-based model of XBeach.
-The tests runs beside the current skillbed and are more focussed on specific modules of the code rather then the performance of the entire model.
+'xbeachtest' is the project where diagnostic tests are created for the process-based model of XBeach.
+The tests run beside the current skillbed and are more focussed on testing specific modules of the code rather then the performance of the entire model.
 Herefore the setup of the models is simple and only the relevant processes to test the module are turned on.
 The idea is that by testing specific processes and functionalities of the code, more insight is created whether they still perform as intended.
 Also bugs should be easier to find because of a structured development of the tests. 
@@ -21,8 +21,8 @@ The source code of the scripts can be found at https://github.com/openearth/xbea
 Acknowledgements
 ================
 
-xbeachtest is initially developed by Tim Leijnse at Deltares as part of an internship regarding 'Developing diagnostic tests for XBeach' (link to TUD repository)
-xbeachtest is currently maintained by Bas Hoonhout at Deltares
+'xbeachtest' is initially developed by Tim Leijnse at Deltares as part of an internship regarding 'Developing diagnostic tests for XBeach' (insert link to TUD repository)
+'xbeachtest' is currently maintained by `Bas Hoonhout <bas.hoonhout@deltares.nl>`_ at Deltares.
 
 Indices and tables
 ==================
