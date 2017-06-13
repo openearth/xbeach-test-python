@@ -5,6 +5,7 @@
 
 import logging
 import os 
+import posixpath
 import numpy as np
 from bathy import Bathymetry
 from user_input import b, p, u
@@ -42,6 +43,12 @@ for i in range(len(u['tests'])):
             logger.debug(runs[k])
             
             path = os.path.join(u['diroutmain'],
+                                u['module'],
+                                u['tests'][i],
+                                u['cases'][j],
+                                runs[k])
+            # Also create a unix compatible path to use in .sh script
+            unixpath = posixpath.join(u['diroutmain'],
                                 u['module'],
                                 u['tests'][i],
                                 u['cases'][j],
@@ -116,7 +123,7 @@ for i in range(len(u['tests'])):
             fname = 'diag'
             with open(os.path.join(path, 'run.sh'), 'w') as fp  :
                 fp.write('#!/bin/sh\n')
-                fp.write('#$ -cwd\n')
+                fp.write('#$ -cwd %s\n' % unixpath)
                 fp.write('#$ -j yes\n')
                 fp.write('#$ -V\n')
                 fp.write('#$ -N %s\n' % fname)
