@@ -17,6 +17,15 @@ The source code of the scripts can be found at https://github.com/openearth/xbea
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
+   
+   project
+   user input
+   setup
+   xbeach
+   bathymetry
+   analysis
+   checks
+   database
 
 Acknowledgements
 ================
