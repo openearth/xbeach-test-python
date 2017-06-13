@@ -7,11 +7,13 @@ import json
 import logging
 import os
 
-logging.basicConfig(filename='xbeachtest-logfile.log', format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.INFO) #.DEBUG)    
+diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
+path = os.path.join(diroutmain, 'xbeachtest-logfile.log')
+
+logging.basicConfig(filename= path, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.INFO) #.DEBUG)    
 logger = logging.getLogger(__name__)
 logger.info('user_input.py is called for') 
 
-diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 
 #%%INPUT FOR SETUP OF MODELS###################################################
 
@@ -73,7 +75,7 @@ b = dict(shape = ['dune','dune','dune','dune','flat'],
     
 ###DICTIONARY FOR OTHER USER INPUT###    
 u = dict(diroutmain = diroutmain,                                               #cases/morfaclist/dzmaxlist/zslist/tstoplist are added to this library in the section below
-         module = 'Avalanching',
+         module = 'avalanching',
          tests = ['pos_x','neg_x','pos_y','neg_y','hor'],                                                                  
          runs = ['benchmark','m1','m3','m3n1','m1n3','m3n3'],                   #benchmark = m1n1               
          waves = 'no',
@@ -139,14 +141,14 @@ c = dict(
 
 #%%MAKING THE DICTIONARY TEXT FILES############################################ 
 
-with open(os.path.join(diroutmain,'Bdictionary.txt'), 'w') as f: 
+with open(os.path.join(diroutmain, u['module'], 'dictB_avalanching.txt'), 'w') as f: 
     json.dump(b, f, indent=4)
 
-with open(os.path.join(diroutmain,'Cdictionary.txt'), 'w') as f:
+with open(os.path.join(diroutmain, u['module'], 'dictC_avalanching.txt'), 'w') as f:
     json.dump(c, f, indent=4)
 
-with open(os.path.join(diroutmain,'Pdictionary.txt'), 'w') as f:
+with open(os.path.join(diroutmain, u['module'], 'dictP_avalanching.txt'), 'w') as f:
     json.dump(p, f, indent=4)
     
-with open(os.path.join(diroutmain,'Udictionary.txt'), 'w') as f:
+with open(os.path.join(diroutmain, u['module'], 'dictU_avalanching.txt'), 'w') as f:
     json.dump(u, f, indent=4)  

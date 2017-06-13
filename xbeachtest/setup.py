@@ -7,7 +7,7 @@ import logging
 import os 
 import numpy as np
 from bathy import Bathymetry
-from user_input import b,p,u
+from user_input import b, p, u
 from xbeachtools import XBeachModel
 from xbeachtools import XBeachBathymetry
 
@@ -21,11 +21,11 @@ logger.info( u['module'])
 
 ###TESTS### 
 for i in range(len(u['tests'])): 
-    logger.info( u['tests'][i])
+    logger.info(u['tests'][i])
     
 ###CASES### 
     for j in range(len(u['cases'])):    
-        logger.info( u['cases'][j])
+        logger.info(u['cases'][j])
         
         p['morfac'] = u['morfaclist'][j]
         p['zs0']    = u['zs0list'][j]

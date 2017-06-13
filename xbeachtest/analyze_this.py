@@ -17,21 +17,21 @@ logger.info('analyze_this.py is called for')
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 os.chdir(diroutmain)    
 
-with open('Bdictionary.txt', 'r') as f:
+with open('dictB_avalanching.txt', 'r') as f:
     b = json.load(f)    
 if b == None:
     logger.info('dictionary b is not succesfully read from text file')
 else:
     logger.info('dictionary b is read from text file')
     
-with open('Cdictionary.txt', 'r') as f:
+with open('dictC_avalanching.txt', 'r') as f:
     c = json.load(f)    
 if c == None:
     logger.info('dictionary c is not succesfully read from text file')
 else:
     logger.info('dictionary c is read from text file')
     
-with open('Udictionary.txt', 'r') as f:
+with open('dictU_avalanching.txt', 'r') as f:
     u = json.load(f)    
 if u == None:
     logger.info('dictionary u is not succesfully read from text file')
@@ -135,10 +135,10 @@ for i in range(len(u['tests'])):
                 
                 #WRITE CHECK TO DATABASE 
                 if checklist[l] in ['massbalance']: 
-                     database.massbalance_entry('avalanching', u['tests'][i], u['cases'][j], runs[k], checklist[l], check, massbalance)
+                     database.massbalance_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check, massbalance)
                      logger.debug('massbalance_entry called for')
                 else:
-                     database.data_entry('avalanching', u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
+                     database.data_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
                      logger.debug('data_entry called for')
                
 #%%OUTPUT######################################################################

@@ -34,11 +34,57 @@ class Bathymetry(XBeachBathymetry):
         self.v = v        
     
 ### GENERAL BUILDING BLOCKS###
-    def dean(self):     
-        logger.debug('dean profile is called for')    
+    def fall_velocity_vanrijn2007(self, temp = 15): #based on OET: dean_beach_profile.m
+        logger.debug('Fall velocity according to Van Rijn 2007 is called for')    
+        # Fall velocity according to Van Rijn 2007
+        dss = self.D50
+        rhoint=1024
+        rhosol=2650
+        dsand=0.000064
+        dgravel=0.002
+        ag=9.81
+        s = rhosol / rhoint
+        vcmol = 4.0e-5 / (20.0 + temp)  
+        if dss < 1.5*dsand:
+            ws = (s-1.0) * ag * dss^2/(18.0*vcmol)
+        elif dss < 0.5*dgravel:
+            if dss < 2.0*dsand:
+                coefw = (-2.9912/dsand) * dss + 15.9824
+            else:
+                coefw = 10.0            
+            ws = coefw * vcmol / dss * (np.sqrt(1.0 + (s-1.0)*ag*dss**3 / (100.0*vcmol**2)) - 1.0)
+        else:
+            ws = 1.1 * np.sqrt((s-1.0)*ag*dss)
+        print('ws= ', ws)
+        return ws
+           
+    def dean1(self, zmin, zmax):        #based on OET: dean_beach_profile.m
+        logger.debug('dean profile 1 is called for')        
+        x = np.arange(-10000, 10000, self.dx)
+        vfall = self.fall_velocity_vanrijn2007()
+        print('vfall= ',vfall)
+        a = 0.51 * vfall ** 0.44
+        z = -a*np.power(x, self.m)
+        print('z= ', z)
+#==============================================================================
+#         z2 = -beta_dry*x
+#         z[x<0] = z2[x<0]
+#==============================================================================
+        ifirst = np.nonzero(z>=zmax)[-1] #'last')  #Vergelijkbare functie voor find zoeken
+        ilast = np.nonzero(z<=zmin)[0]#, 1, 'first')
+        print('ifirst= ', ifirst)
+        print('ilast= ', ilast)
+        x = x[ifirst:ilast]
+        z = z[ifirst:ilast]
+        
+        print('z=',z)
+        return x, z
+
+    def dean2(self):             #--> evt maken als in dean_beach_profile.m / dean1 en dean2 maken
+        logger.debug('dean profile 2 is called for')    
         x = np.arange(-self.width, 0, self.dx)
         ws = ((self.s-1)*9.81*self.D50**2/(18*self.v))                          #eq 6.7 in coastal dynamics book  
-        A = 0.5*ws**0.44                                                        #eq 7.7 in coastal dynamics book  
+        A = 0.5*ws**0.44        #0.51 in matlab                                                #eq 7.7 in coastal dynamics book  
         z = -abs(A*np.power(-1*x, self.m)) + self.height
         x += self.width   
         return x, z
@@ -66,7 +112,7 @@ class Bathymetry(XBeachBathymetry):
     def dune_1d(self, **kwargs):               
         logger.debug('dune_1d is called for')
         self.width = self.shorewidth
-        xshore, zshore = self.dean() 
+        xshore, zshore = self.dean2() 
         self.width = self.dunewidth + self.dx
         self.slope = self.duneslope
         xdune, zdune = self.sloping()   
@@ -92,4 +138,10 @@ class Bathymetry(XBeachBathymetry):
     def flat_2d(self, **kwargs):
         logger.debug('flat_2d is called for')
         self.flat_1d()
+        self.x, self.y, self.z = self.yuniform(self.x, self.z)
+        
+    def dean1_2d(self, zmin, zmax, **kwargs):
+        logger.debug('dean1_2d is called for')
+#        self.width = self.shorewidth + self.dunewidth + self.dx   --> je geeft de width zelf al op
+        self.x, self.z = self.dean1(zmin, zmax)
         self.x, self.y, self.z = self.yuniform(self.x, self.z)
