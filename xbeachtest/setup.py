@@ -5,7 +5,7 @@
 
 import logging
 import os 
-import os.posixpath
+import posixpath
 import numpy as np
 from bathy import Bathymetry
 from user_input import b, p, u
@@ -48,7 +48,7 @@ for i in range(len(u['tests'])):
                                 u['cases'][j],
                                 runs[k])
             # Also create a unix compatible path to use in .sh script
-            unixpath = os.posixpath.join(u['diroutmain'],
+            unixpath = posixpath.join(u['diroutmain'],
                                 u['module'],
                                 u['tests'][i],
                                 u['cases'][j],
