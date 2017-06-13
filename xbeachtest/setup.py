@@ -123,7 +123,7 @@ for i in range(len(u['tests'])):
             fname = 'diag'
             with open(os.path.join(path, 'run.sh'), 'w') as fp  :
                 fp.write('#!/bin/sh\n')
-                fp.write('#$ -cwd %s\n' % unixpath)
+                fp.write('#$ -cwd\n')
                 fp.write('#$ -j yes\n')
                 fp.write('#$ -V\n')
                 fp.write('#$ -N %s\n' % fname)
@@ -138,6 +138,8 @@ for i in range(len(u['tests'])):
                 fp.write('module load /opt/xbeach/modules/xbeach-%s_gcc_4.9.2_1.8.3_HEAD\n\n' % (os.getenv('XBEACH_PROJECT_ID')))
                 fp.write('module list\n\n')
                 
+                fp.write('cd %s\n\n' % unixpath)
+                                
                 fp.write('mpirun -report-bindings -np %d -map-by core xbeach\n\n' % (nprocesses+1))
                 fp.write('mpdallexit\n')
                 
