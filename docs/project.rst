@@ -32,7 +32,7 @@ Structure of the scripts
 ------------------------
 
 To realise the different diagnostic tests a structure of Python scripts is made (see Figure :numref:`fig-scripts-structure-overview`).
-At first there is a user input file where all desired parameters, setting and options are specified. From here these are used in the setup and analyze_this script.
+At first there is a user input file where all desired parameters, setting and options are specified. From here these are used in the setup and analyze_this scripts.
 In the setup file the desired folder structures and XBeach input files are created for the different models within one diagnostic test. 
 To create the desired bathymetries a seperate file called bathy.py is used, which is shared between all diagnostic tests.
 To create the XBeach user input files (params.txt, jonswap.txt and grid files etc) are made using xbeach.py from https://github.com/openearth/xbeach-tools-python.
@@ -56,12 +56,9 @@ At last the existence of a basic logfile should be mentioned.
    And the red box represents the shared script of openearth/xbeach-tools-python/xbeachtools. 
    
 For a description of the specific scripts of Figure :numref:`fig-scripts-structure-overview` see:
-
 .. toctree::
    :maxdepth: 1
-   :caption: Contents:
    
-   project
    user input
    setup
    xbeach
