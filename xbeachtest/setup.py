@@ -48,7 +48,7 @@ for i in range(len(u['tests'])):
                                 u['cases'][j],
                                 runs[k])
             # Also create a unix compatible path to use in .sh script
-            unixpath = posixpath.join(u['diroutmain'],
+            unixpath = posixpath.join(os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION_UNIX'),
                                 u['module'],
                                 u['tests'][i],
                                 u['cases'][j],
