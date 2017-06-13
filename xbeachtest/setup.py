@@ -137,10 +137,5 @@ for i in range(len(u['tests'])):
                 fp.write('module load openmpi/1.8.3_gcc_4.9.2\n')
                 fp.write('module load /opt/xbeach/modules/xbeach-%s_gcc_4.9.2_1.8.3_HEAD\n\n' % (os.getenv('XBEACH_PROJECT_ID')))
                 fp.write('module list\n\n')
-                
-                fp.write('cd %s\n\n' % unixpath)
                                 
-                fp.write('mpirun -report-bindings -np %d -map-by core xbeach\n\n' % (nprocesses+1))
-                fp.write('mpdallexit\n')
-                
-                
+                fp.write('mpirun -report-bindings -np %d -map-by core -wdir %s xbeach\n\n' % (nprocesses+1, unixpath))
