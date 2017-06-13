@@ -116,7 +116,7 @@ for i in range(len(u['tests'])):
             fname = 'diag'
             with open(os.path.join(path, 'run.sh'), 'w') as fp  :
                 fp.write('#!/bin/sh\n')
-                fp.write('#$ -cwd\n')
+                fp.write('#$ -cwd %s\n' % path)
                 fp.write('#$ -j yes\n')
                 fp.write('#$ -V\n')
                 fp.write('#$ -N %s\n' % fname)
