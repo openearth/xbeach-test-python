@@ -40,7 +40,7 @@ def setup(app):
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinxcontrib.napoleon',
+    #'sphinxcontrib.napoleon',
     'sphinx.ext.mathjax',
     'sphinxcontrib.bibtex',
     'sphinx.ext.viewcode',
