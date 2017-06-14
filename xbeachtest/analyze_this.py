@@ -10,12 +10,15 @@ import json
 import database
 import checks
 
-logger = logging.getLogger(__name__)
-logger.info('analyze_this.py is called for')
-
 #Open dictionaries from test-files:
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-os.chdir(diroutmain)    
+os.chdir(diroutmain) 
+
+dirout = os.path.join(diroutmain, 'xbeachtest-avalanching-analyze_this.log')
+logging.basicConfig(filename= dirout, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.INFO) #.DEBUG)    
+logger = logging.getLogger(__name__)
+logger.info('diroutmain= %s', diroutmain)
+logger.info('analyze_this.py is called for')
 
 with open('dictB_avalanching.txt', 'r') as f:
     b = json.load(f)    
@@ -58,7 +61,7 @@ for i in range(len(u['tests'])):
         zbEndtrans_n_list = []
         
         for k in range(len(runs)):            
-            path = os.path.join(u['diroutmain'],
+            path = os.path.join(diroutmain,
                                 u['module'],
                                 u['tests'][i],
                                 u['cases'][j],
@@ -69,7 +72,8 @@ for i in range(len(u['tests'])):
             os.chdir(path)     
             
 ###READ XBEACH OUTPUT FILES###       
-            fname = path + 'xboutput.nc'
+            fname = os.path.join(path , 'xboutput.nc')
+            logger.info('read netcdf file from location: %s', fname)
 
             with netCDF4.Dataset(fname, 'r') as xb:                
                                   

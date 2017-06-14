@@ -8,7 +8,7 @@ import logging
 import os
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-path = os.path.join(diroutmain, 'xbeachtest-logfile.log')
+path = os.path.join(diroutmain, 'xbeachtest-avalanching-setup.log')
 
 logging.basicConfig(filename= path, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.INFO) #.DEBUG)    
 logger = logging.getLogger(__name__)
