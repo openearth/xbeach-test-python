@@ -1,12 +1,12 @@
-.. xbeachtest documentation master file, created by
+.. XBdiagnostic documentation master file, created by
    sphinx-quickstart on Tue Jun 13 09:56:18 2017.
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to xbeachtest's documentation!
+Welcome to XBdiagnostic's documentation!
 ======================================
 
-'xbeachtest' is the project where diagnostic tests are created for the process-based model of XBeach.
+'XBdiagnostic' is the project where diagnostic tests are created for the process-based model of XBeach.
 The tests run beside of the current skillbed and are more focussed on testing specific modules of the code rather then the performance of the entire model.
 Herefore the setup of the models is simple and only the relevant processes to test the module are turned on.
 The idea is that by testing specific processes and functionalities of the code, more insight is created whether they still perform as intended.
