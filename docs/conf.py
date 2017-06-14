@@ -42,7 +42,7 @@ extensions = [
     'sphinx.ext.autodoc',
     #'sphinxcontrib.napoleon',
     'sphinx.ext.mathjax',
-    'sphinxcontrib.bibtex',
+   # 'sphinxcontrib.bibtex',
     'sphinx.ext.viewcode',
 ]
 
