@@ -14,8 +14,8 @@ import checks
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 os.chdir(diroutmain) 
 
-dirout = os.path.join(diroutmain, 'xbeachtest-avalanching-analyze_this.log')
-logging.basicConfig(filename= dirout, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.INFO) #.DEBUG)    
+dirout = os.path.join(diroutmain, 'xbeachtest-avalanching-analyze_this.log')  
+logging.basicConfig(filename= dirout, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
 logger = logging.getLogger(__name__)
 logger.info('diroutmain= %s', diroutmain)
 logger.info('analyze_this.py is called for')
@@ -57,8 +57,10 @@ for i in range(len(u['tests'])):
         else:
             runs = u['runs']
         
-        zbEndtrans_m_list = []
-        zbEndtrans_n_list = []
+        zbEndtrans_m_bench = []
+#        zbEndtrans_m_comp = []
+        zbEndtrans_n_bench = []
+#        zbEndtrans_n_comp = []
         
         for k in range(len(runs)):            
             path = os.path.join(diroutmain,
@@ -126,13 +128,27 @@ for i in range(len(u['tests'])):
                         
                 elif checklist[l] in ['benchmarkcomp_m']:
                     zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
-                    zbEndtrans_m_list.extend(zbEndtrans_m)
-                    check = checks.rmse_comp(zbEndtrans_m_list[0],zbEndtrans_m_list[k], ny, c['rmsecon'])  
+#                    print('First zbEndtrans_m_list= %s', zbEndtrans_m_list)
+                    if runs[k] in ['benchmark']:
+                        zbEndtrans_m_bench.extend(zbEndtrans_m)
+#                    zbEndtrans_m_comp.extend(zbEndtrans_m)
                     
+#                    print('zbEndtrans_m_list= %s', zbEndtrans_m_list)                   
+#                    print('After extending zbEndtrans_m_list= %s', zbEndtrans_m_list)
+#                    print('zbEndtrans_m= %s', zbEndtrans_m)
+                    check = checks.rmse_comp(zbEndtrans_m_bench,zbEndtrans_m, ny, c['rmsecon'])     #zbEndtrans_m instead of zbEndtrans_m_list[k]
+#HIER GOED OPLETTEN DAT DE VORMEN WEL ECHT HETZELFDE ZIJN, BELANGRIJK VOOR .EXTEND EN RMSE_COMP
                 elif checklist[l] in ['benchmarkcomp_n']:
                     zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
-                    zbEndtrans_n_list.extend(zbEndtrans_n)
-                    check = checks.rmse_comp(zbEndtrans_n_list[0],zbEndtrans_n_list[k], ny, c['rmsecon'])   
+#                    print('First zbEndtrans_n_list= %s', zbEndtrans_n_list)
+                    if runs[k] in ['benchmark']:                  
+                        zbEndtrans_n_bench.extend(zbEndtrans_n)
+#                    zbEndtrans_n_comp.extend(zbEndtrans_n)
+#                    print('zbEndtrans_n_list= %s', zbEndtrans_n_list)
+                    if runs[k] in ['m1', 'm3']:
+                        check = 0               # code 0 geven want er valt in y-richting niets te checken
+                    else:
+                        check = checks.rmse_comp(zbEndtrans_n_bench,zbEndtrans_n, ny, c['rmsecon'])   
                     
                 else:
                     check = 2

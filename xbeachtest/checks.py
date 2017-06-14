@@ -42,7 +42,7 @@ def massbalance(zb0, zbEnd, dx, dy, massbalancecon):
     if massbalance > massbalancecon:
         check = 1
         logger.debug('check= %s --> too much mass entering the model', check)              
-    elif massbalance < massbalancecon:
+    elif massbalance < -massbalancecon:
         check = 1
         logger.debug('check= %s --> too much mass leaving the model', check)  
     else:
@@ -56,8 +56,8 @@ def midtrans(zb0, zbEnd, ny): #(Middle transect)
     logger.info('Middle transect (midtrans) is called for') 
     
     if ny==0:                                                                   #For 1D cases you do not have to take a transect, also no transect in n-direction
-        zb0trans_m = zb0
-        zbEndtrans_m = zbEnd
+        zb0trans_m = zb0.reshape(-1,1)
+        zbEndtrans_m = zbEnd.reshape(-1,1)
         zb0trans_n = 0
         zbEndtrans_n = 0
     else:                                                                       #2D cases
@@ -71,9 +71,9 @@ def midtrans(zb0, zbEnd, ny): #(Middle transect)
 
 ###Calculating slopes along transect###
 def slope(zbtrans, dd, nd):                                                     #dd = dx or dy, nd = nx or ny
-    slp = np.zeros(len(zbtrans))
-    for i in range(nd-1):
-        slp[i] = ((zbtrans[i+1]-zbtrans[i])/dd)
+    slp = np.zeros(nd)
+    for i in range(nd):
+        slp[i] = (abs(zbtrans[i+1]-zbtrans[i])/dd)
     return slp
 
 ###CHECK: Slope m-direction###                                                  
@@ -118,7 +118,8 @@ def n_slope(zb0, zbEnd, nx, ny, dy, slploc, slptheo, slpcon):
                 check = 0                   
                 logger.debug('check= %s', check)     
     else:
-        raise ValueError('ny>0 expected, got:', ny)
+        check = 0 #let 1D cases get a code 0
+#        raise ValueError('ny>0 expected, got:', ny)
     return check
 
 ###CHECK: MPI m-direction### 
@@ -177,13 +178,24 @@ def n_mpi(nmpi, zb0, zbEnd, dy, ny, dr, mpicon, mpinr):
         raise ValueError('nmpi>1 expected, got:', nmpi)
     return check
 
-###CHECK: Benchmark comparison using the RMSE### 
+###CHECK: Benchmark comparison using the RMSE###                    #ZEGGEN DAT JE HIER OP MOET LETTEN MET RICHTING VAN INPUT
 def rmse_comp(zbEndbench, zbEnd, ny, rmsecon):
     logger.info('rsme comparison is called for')
     
     #processing 
-    rmse = (np.sqrt(np.mean((zbEnd - zbEndbench)**2)))
-
+    diff = np.zeros(len(zbEndbench))
+    for i in range(len(zbEnd)):
+#        print('i= %s',i)
+        diff[i] = zbEnd[i] - zbEndbench[i]
+    
+#    diff = zbEnd - zbEndbench
+#    diffasarray= np.asarray(diff)
+    
+    
+    rmse = (np.sqrt(np.mean((diff)**2)))
+#    print('rmse= %s', rmse)
+    logger.debug('rmse= %s', rmse)
+#    print('zbEnd-zbEndbench is called for: %s', (zbEnd-zbEndbench))  #JE HEBT HIER HET PROBLEEM DAT ZE NIET ALTIJD HETZELFDE GEDRAAID ZIJN!!!
     #checking
     if rmse > rmsecon:
         check = 1

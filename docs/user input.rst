@@ -1,6 +1,11 @@
 User input
 ==========
 
+Input structre
+---------------
+
+The applied structure 
+
 
 uitleggen verschillende dictionaries
 

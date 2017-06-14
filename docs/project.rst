@@ -31,7 +31,7 @@ Within this diagnostic tests you can have a subdivision of differenct tests/case
 Structure of the scripts
 ------------------------
 
-To realise the different diagnostic tests a structure of Python scripts is made (see Figure :numref:`fig-scripts-structure-overview`).
+To realise the different diagnostic tests a structure of Python scripts is made (see :numref:`fig-scripts-structure-overview`).
 At first there is a user input file where all desired parameters, setting and options are specified. From here these are used in the setup and analyze_this scripts.
 In the setup file the desired folder structures and XBeach input files are created for the different models within one diagnostic test. 
 To create the desired bathymetries a seperate file called bathy.py is used, which is shared between all diagnostic tests.
@@ -55,7 +55,8 @@ At last the existence of a basic logfile should be mentioned.
    The blue boxes represent scripts that are shared between all diagnostic tests and that can be extended if a new functionality is needed.
    And the red box represents the shared script of openearth/xbeach-tools-python/xbeachtools. 
    
-For a description of the specific scripts of Figure :numref:`fig-scripts-structure-overview` see:
+For a description of the specific scripts of :numref:`fig-scripts-structure-overview` see:
+
 .. toctree::
    :maxdepth: 1
    

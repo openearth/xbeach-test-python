@@ -3,9 +3,11 @@
 
 import numpy as np
 import re
+import os
 
 def mpidims(dr):
-    with open(dr + 'XBlog.txt','r') as f:       
+    drXBlog = os.path.join(dr, 'XBlog.txt')
+    with open(drXBlog,'r') as f:       
         lines = f.readlines()
     
     for i in range(len(lines)):    
