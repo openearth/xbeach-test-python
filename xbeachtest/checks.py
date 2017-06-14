@@ -21,10 +21,10 @@ def bedlevelchange(zb0, zbEnd):
     
     #checking
     if zbDelta > 0:
-        check = 0                                                               #check=1 means result is satisfactory
+        check = 0                                                               #check=0 means result is satisfactory
         logger.debug('check= %s', check) 
     else:
-        check = 1                                                             #check=0.5 means test has run but result is unsatisfactory
+        check = 1                                                               #check=1 means test has run but result is unsatisfactory
         logger.debug('check= %s --> mean of delta zb = 0', check)
     return check
     
@@ -61,8 +61,8 @@ def midtrans(zb0, zbEnd, ny): #(Middle transect)
         zb0trans_n = 0
         zbEndtrans_n = 0
     else:                                                                       #2D cases
-        trans_m = round(np.shape(zbEnd)[0]/2)                                   #n-location of central transect in m direction
-        trans_n = round(np.shape(zbEnd)[1]/2)                                   #m-location of central transect in n direction  
+        trans_m = int(round(np.shape(zbEnd)[0]/2))                                   #n-location of central transect in m direction
+        trans_n = int(round(np.shape(zbEnd)[1]/2))                                   #m-location of central transect in n direction  
         zb0trans_m = zb0[trans_m, :]    
         zb0trans_n = zb0[:,trans_n]
         zbEndtrans_m = zbEnd[trans_m, :]   

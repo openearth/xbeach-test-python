@@ -151,7 +151,7 @@ for i in range(len(u['tests'])):
                         check = checks.rmse_comp(zbEndtrans_n_bench,zbEndtrans_n, ny, c['rmsecon'])   
                     
                 else:
-                    check = 2
+                    check = 2                                                   # check = 2 means that the check is not performed or not finished correctly
                 
                 #WRITE CHECK TO DATABASE 
                 if checklist[l] in ['massbalance']: 
