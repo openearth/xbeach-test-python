@@ -8,6 +8,7 @@ import logging
 import os
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
+#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"               #TERUGZETTEN!!!
 path = os.path.join(diroutmain, 'xbeachtest-avalanching-setup.log')
 
 logging.basicConfig(filename= path, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
@@ -132,8 +133,14 @@ c = dict(
         mpicon = 0.1, 
         mpinr = -1,
         slpcon = 0.1, 
-        slploc = [2,12,30,44], 
-        slptheo_cross = [0,0.015,wetslp,dryslp],   
+        slploc = [0,20,-20,-1], 
+#        slploc_pos = [2,12,30,-2], 
+        slptheo_cross_neg_normal = [0,0.017,wetslp,dryslp],
+        slptheo_cross_neg_wet = [0,wetslp,wetslp,wetslp],  
+        slptheo_cross_neg_dry = [0,0.017,dryslp,dryslp], 
+        slptheo_cross_pos_normal = [dryslp,wetslp,0.017,0],
+        slptheo_cross_pos_wet = [wetslp,wetslp,wetslp,0],  
+        slptheo_cross_pos_dry = [dryslp,dryslp,0.017,0], 
         slptheo_long = [0,0,0,0],        
         rmsecon = 0.2,
         massbalancecon = 5) 

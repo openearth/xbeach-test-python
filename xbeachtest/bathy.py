@@ -58,26 +58,25 @@ class Bathymetry(XBeachBathymetry):
         print('ws= ', ws)
         return ws
            
-    def dean1(self, zmin, zmax):        #based on OET: dean_beach_profile.m
-        logger.debug('dean profile 1 is called for')        
+    def dean1(self, zmin, zmax, beta_dry, height = 0):        #based on OET: dean_beach_profile.m (not exactly the same)
+        logger.info('dean profile 1 is called for')        #beta_dry is the dry slope (above z=0)
         x = np.arange(-10000, 10000, self.dx)
         vfall = self.fall_velocity_vanrijn2007()
         print('vfall= ',vfall)
         a = 0.51 * vfall ** 0.44
-        z = -a*np.power(x, self.m)
-        print('z= ', z)
-#==============================================================================
-#         z2 = -beta_dry*x
-#         z[x<0] = z2[x<0]
-#==============================================================================
-        ifirst = np.nonzero(z>=zmax)[-1] #'last')  #Vergelijkbare functie voor find zoeken
-        ilast = np.nonzero(z<=zmin)[0]#, 1, 'first')
-        print('ifirst= ', ifirst)
-        print('ilast= ', ilast)
-        x = x[ifirst:ilast]
-        z = z[ifirst:ilast]
-        
-        print('z=',z)
+        z = -a*np.power(abs(x), self.m)
+        z2 = -beta_dry*x
+        z[x<0] = z2[x<0]
+        ifirst = np.nonzero(z>=zmax)[0][-1]
+        ilast = np.nonzero(z<=zmin)[0][0]
+        logger.debug('ifirst= ', ifirst)
+        logger.debug('ilast= ', ilast)
+        xt = x[ifirst:ilast]
+        zt = z[ifirst:ilast]
+        x = xt + abs(xt[0])         #added wrt matlab
+        z = zt[::-1] + height               #added wrt matlab
+        logger.debug('z=',z)
+        logger.debug('x= ', x)
         return x, z
 
     def dean2(self):             #--> evt maken als in dean_beach_profile.m / dean1 en dean2 maken
@@ -140,8 +139,8 @@ class Bathymetry(XBeachBathymetry):
         self.flat_1d()
         self.x, self.y, self.z = self.yuniform(self.x, self.z)
         
-    def dean1_2d(self, zmin, zmax, **kwargs):
+    def dean1_2d(self, zmin, zmax, beta_dry, height, **kwargs):
         logger.debug('dean1_2d is called for')
 #        self.width = self.shorewidth + self.dunewidth + self.dx   --> je geeft de width zelf al op
-        self.x, self.z = self.dean1(zmin, zmax)
+        self.x, self.z = self.dean1(zmin, zmax, beta_dry, height)
         self.x, self.y, self.z = self.yuniform(self.x, self.z)

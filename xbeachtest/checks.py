@@ -96,7 +96,7 @@ def m_slope(zb0, zbEnd, nx, ny, dx, slploc, slptheo, slpcon):
             break
         else:
             check = 0                   
-            logger.debug('check= %s', check)
+            logger.debug('check= %s because slope= %s', check, slope_m[slploc[b]])
     return check
 
 ###CHECK: Slope n-direction###                                                  
@@ -120,7 +120,7 @@ def n_slope(zb0, zbEnd, nx, ny, dy, slploc, slptheo, slpcon):
                 break
             else:
                 check = 0                   
-                logger.debug('check= %s', check)     
+                logger.debug('check= %s because slope= %s', check, slope_n[slploc[b]])     
     else:
         check = 2 #let 1D cases get a code 2
 #        raise ValueError('ny>0 expected, got:', ny)

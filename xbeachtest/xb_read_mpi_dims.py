@@ -9,13 +9,13 @@ def mpidims(dr):
     drXBlog = os.path.join(dr, 'XBlog.txt')
     with open(drXBlog,'r') as f:       
         lines = f.readlines()
-    
+    iline = 0
     for i in range(len(lines)):    
         line = lines[i].strip()
         if re.match('^Distribution of matrix on processors', line):  
             iline = i      
             break       
-    if iline:
+    if iline > 0:  
         iline += 2
     else:
         raise ValueError('The specified log file has no information on mpi domains. Probably it was run on a single core')

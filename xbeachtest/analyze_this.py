@@ -58,9 +58,7 @@ for i in range(len(u['tests'])):
             runs = u['runs']
         
         zbEndtrans_m_bench = []
-#        zbEndtrans_m_comp = []
         zbEndtrans_n_bench = []
-#        zbEndtrans_n_comp = []
         
         for k in range(len(runs)):            
             path = os.path.join(diroutmain,
@@ -106,67 +104,81 @@ for i in range(len(u['tests'])):
                             check = 0
                         else:
                             check = 1
-                                            
+                           
+                            
                 elif checklist[l] in ['massbalance']: 
                     check, massbalance = checks.massbalance(zb0, zbEnd, dx, dy, c['massbalancecon'])
                     
+                    
                 elif checklist[l] in ['m_slope']:
                     if u['tests'][i] in ['neg_x']:
-                        slptheo = c['slptheo_cross']
+                        if u['cases'][j] in ['zs0_45']:
+                            slptheo = c['slptheo_cross_neg_wet']
+                        elif u['cases'][j] in ['zs0_-1']:
+                            slptheo = c['slptheo_cross_neg_dry']
+                        else:
+                            slptheo = c['slptheo_cross_neg_normal']
+                            
                     elif u['tests'][i] in ['pos_x']:
-                        slptheo = c['slptheo_cross']
-                        slptheo.reverse()
-                        logger.debug('slptheo is reversed and became: %s', slptheo)
+                        if u['cases'][j] in ['zs0_45']:
+                            slptheo = c['slptheo_cross_pos_wet']
+                        elif u['cases'][j] in ['zs0_-1']:
+                            slptheo = c['slptheo_cross_pos_dry']
+                        else:
+                            slptheo = c['slptheo_cross_pos_normal']
                     elif u['tests'][i] in ['pos_y', 'neg_y','hor']: #Hier hoeft niks omgedraaid te worden omdat het om een slope van 0 gaat
-                        slptheo = c['slptheo_long']                        
-                    check = checks.m_slope(zb0, zbEnd, nx, ny, dx, c['slploc'], slptheo, c['slpcon'])
-                    if u['tests'][i] in ['pos_x']:
-                        slptheo.reverse()       #weer terug zetten naar oorspronkelijke vorm
+                        slptheo = c['slptheo_long'] 
+                    logger.debug('slptheo= %s', slptheo)    
+                    check = checks.m_slope(zb0, zbEnd, nx, ny, dx, c['slploc'], slptheo, c['slpcon'])   #KIJKEN OF SLPLOC NIET OOK NOG MOET VERANDEREN BIJ POS CASES (niet spiegelen maar andere waarden!!!)
+                    
                         
                 elif checklist[l] in ['n_slope']:
                     if u['tests'][i] in ['pos_x', 'neg_x','hor']:   #'hor' should have a slope of 0, which is specified in slptheo_long
                         slptheo = c['slptheo_long']             #Hier hoeft niks omgedraaid te worden omdat het om slopes van 0 gaat
                     elif u['tests'][i] in ['neg_y']:
-                        slptheo = c['slptheo_cross']
+                        if u['cases'][j] in ['zs0_45']:
+                            slptheo = c['slptheo_cross_neg_wet']
+                        elif u['cases'][j] in ['zs0_-1']:
+                            slptheo = c['slptheo_cross_neg_dry']
+                        else:
+                            slptheo = c['slptheo_cross_neg_normal']
+                            
                     elif u['tests'][i] in ['pos_y']:
-                        slptheo = c['slptheo_cross']
-                        slptheo.reverse()
-                        logger.debug('slptheo is reversed and became: %s', slptheo)
+                        if u['cases'][j] in ['zs0_45']:
+                            slptheo = c['slptheo_cross_pos_wet']
+                        elif u['cases'][j] in ['zs0_-1']:
+                            slptheo = c['slptheo_cross_pos_dry']
+                        else:
+                            slptheo = c['slptheo_cross_pos_normal']
+                    logger.debug('slptheo= %s', slptheo)                            
                     check = checks.n_slope(zb0, zbEnd, nx, ny, dy, c['slploc'], slptheo, c['slpcon'])       #check if correctly changed to 'slptheo' instead of 'c['slptheo_long']
-                    if u['tests'][i] in ['pos_y']:
-                        slptheo.reverse()       #weer terug zetten naar oorspronkelijke vorm
+                    
                         
                 elif checklist[l] in ['m_mpi']:    
                     if mmpi>1:
                         check = checks.m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, path, c['mpicon'], c['mpinr'])   #dr moet per run veranderen dus daarom is u['diroutmain'] aangepast naar 'path'
                     else:
                         check = 0       #een 0 geven als mmpi = 1
-                        
+                  
+                    
                 elif checklist[l] in ['n_mpi']:    
                     if nmpi>1:
                         check = checks.n_mpi(nmpi, zb0, zbEnd, dy, ny, path, c['mpicon'], c['mpinr'])
                     else:
                         check = 0         #een 0 geven als nmpi = 1
+                      
                         
                 elif checklist[l] in ['benchmarkcomp_m']:
                     zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
-#                    print('First zbEndtrans_m_list= %s', zbEndtrans_m_list)
                     if runs[k] in ['benchmark']:
                         zbEndtrans_m_bench.extend(zbEndtrans_m)
-#                    zbEndtrans_m_comp.extend(zbEndtrans_m)
-                    
-#                    print('zbEndtrans_m_list= %s', zbEndtrans_m_list)                   
-#                    print('After extending zbEndtrans_m_list= %s', zbEndtrans_m_list)
-#                    print('zbEndtrans_m= %s', zbEndtrans_m)
-                    check = checks.rmse_comp(zbEndtrans_m_bench,zbEndtrans_m, ny, c['rmsecon'])     #zbEndtrans_m instead of zbEndtrans_m_list[k]
-#HIER GOED OPLETTEN DAT DE VORMEN WEL ECHT HETZELFDE ZIJN, BELANGRIJK VOOR .EXTEND EN RMSE_COMP
+                    check = checks.rmse_comp(zbEndtrans_m_bench,zbEndtrans_m, ny, c['rmsecon'])    
+
                 elif checklist[l] in ['benchmarkcomp_n']:
                     zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
-#                    print('First zbEndtrans_n_list= %s', zbEndtrans_n_list)
                     if runs[k] in ['benchmark']:                  
                         zbEndtrans_n_bench.extend(zbEndtrans_n)
-#                    zbEndtrans_n_comp.extend(zbEndtrans_n)
-#                    print('zbEndtrans_n_list= %s', zbEndtrans_n_list)
+
                     if runs[k] in ['m1', 'm3']:
                         check = 0               # code 0 geven want er valt in y-richting niets te checken
                     else:
@@ -174,7 +186,7 @@ for i in range(len(u['tests'])):
                     
                 else:
                     check = 2                                                   # check = 2 means that the check is not performed or not finished correctly
-                 
+                
                 #WRITE CHECK TO DATABASE 
                 if checklist[l] in ['massbalance']: 
                      database.massbalance_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check, massbalance)
@@ -182,7 +194,7 @@ for i in range(len(u['tests'])):
                 else:
                      database.data_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
                      logger.debug('data_entry called for')
-               
+                             
 #%%OUTPUT######################################################################
       
 #outside loop  -> the results should send error messages to the person responsible
