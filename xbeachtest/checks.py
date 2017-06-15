@@ -89,9 +89,11 @@ def m_slope(zb0, zbEnd, nx, ny, dx, slploc, slptheo, slpcon):
         if slope_m[slploc[b]] > slptheo[b]*(1+slpcon):         
             check = 1
             logger.debug('check= %s --> slope %s > theoretical slope %s', check, slope_m[slploc[b]], slptheo[b] * (1+slpcon))
+            break
         elif slope_m[slploc[b]] < slptheo[b]*(1-slpcon):  
             check = 1
             logger.debug('check= %s --> slope %s < theoretical slope %s', check, slope_m[slploc[b]], slptheo[b] * (1-slpcon))
+            break
         else:
             check = 0                   
             logger.debug('check= %s', check)
@@ -111,14 +113,16 @@ def n_slope(zb0, zbEnd, nx, ny, dy, slploc, slptheo, slpcon):
             if slope_n[slploc[b]] > slptheo[b] * (1 + slpcon):         
                 check = 1
                 logger.debug('check= %s --> slope %s > theoretical slope %s', check, slope_n[slploc[b]] , slptheo[b] * (1 + slpcon))
+                break
             elif slope_n[slploc[b]] < slptheo[b] * (1 - slpcon):
                 check = 1
                 logger.debug('check= %s --> slope %s < theoretical slope %s', check, slope_n[slploc[b]] , slptheo[b] * (1 - slpcon))
+                break
             else:
                 check = 0                   
                 logger.debug('check= %s', check)     
     else:
-        check = 0 #let 1D cases get a code 0
+        check = 2 #let 1D cases get a code 2
 #        raise ValueError('ny>0 expected, got:', ny)
     return check
 

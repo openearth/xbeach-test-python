@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 logger.info('checks.py is called for')
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun - Copy of run 56/"
-path = os.path.join(diroutmain,'xbeachtest-results.db')
+#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"               #TERUGZETTEN!!!
+path = os.path.join(diroutmain,'xbeachtest-results.db')            #TERUGZETTEN!!!
 conn = sqlite3.connect(path)     #':memory:'  to store in memory
 logger.info("Opened database successfully")
 

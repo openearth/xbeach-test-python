@@ -99,32 +99,54 @@ for i in range(len(u['tests'])):
             
             for l in range(len(checklist)):
                 if checklist[l] in ['bedlevelchange']:      
-                    check = checks.bedlevelchange(zb0, zbEnd)
                     
+                    check = checks.bedlevelchange(zb0, zbEnd)
+                    if u['tests'][i] in ['hor']:
+                        if check == 1:              #For the horizontal tests it is a satisfactory result if there is no bed level change
+                            check = 0
+                        else:
+                            check = 1
+                                            
                 elif checklist[l] in ['massbalance']: 
                     check, massbalance = checks.massbalance(zb0, zbEnd, dx, dy, c['massbalancecon'])
                     
                 elif checklist[l] in ['m_slope']:
-                    if u['tests'][i] in ['pos_x', 'neg_x']:
+                    if u['tests'][i] in ['neg_x']:
                         slptheo = c['slptheo_cross']
-                    elif u['tests'][i] in ['pos_y', 'neg_y','hor']:
-                        slptheo = c['slptheo_long']
+                    elif u['tests'][i] in ['pos_x']:
+                        slptheo = c['slptheo_cross']
+                        slptheo.reverse()
+                        logger.debug('slptheo is reversed and became: %s', slptheo)
+                    elif u['tests'][i] in ['pos_y', 'neg_y','hor']: #Hier hoeft niks omgedraaid te worden omdat het om een slope van 0 gaat
+                        slptheo = c['slptheo_long']                        
                     check = checks.m_slope(zb0, zbEnd, nx, ny, dx, c['slploc'], slptheo, c['slpcon'])
-                    
+                    if u['tests'][i] in ['pos_x']:
+                        slptheo.reverse()       #weer terug zetten naar oorspronkelijke vorm
+                        
                 elif checklist[l] in ['n_slope']:
-                    if u['tests'][i] in ['pos_x', 'neg_x']:
-                        slptheo = c['slptheo_long']
-                    elif u['tests'][i] in ['pos_y', 'neg_y','hor']:
+                    if u['tests'][i] in ['pos_x', 'neg_x','hor']:   #'hor' should have a slope of 0, which is specified in slptheo_long
+                        slptheo = c['slptheo_long']             #Hier hoeft niks omgedraaid te worden omdat het om slopes van 0 gaat
+                    elif u['tests'][i] in ['neg_y']:
                         slptheo = c['slptheo_cross']
+                    elif u['tests'][i] in ['pos_y']:
+                        slptheo = c['slptheo_cross']
+                        slptheo.reverse()
+                        logger.debug('slptheo is reversed and became: %s', slptheo)
                     check = checks.n_slope(zb0, zbEnd, nx, ny, dy, c['slploc'], slptheo, c['slpcon'])       #check if correctly changed to 'slptheo' instead of 'c['slptheo_long']
-                    
+                    if u['tests'][i] in ['pos_y']:
+                        slptheo.reverse()       #weer terug zetten naar oorspronkelijke vorm
+                        
                 elif checklist[l] in ['m_mpi']:    
                     if mmpi>1:
                         check = checks.m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, path, c['mpicon'], c['mpinr'])   #dr moet per run veranderen dus daarom is u['diroutmain'] aangepast naar 'path'
+                    else:
+                        check = 0       #een 0 geven als mmpi = 1
                         
                 elif checklist[l] in ['n_mpi']:    
                     if nmpi>1:
                         check = checks.n_mpi(nmpi, zb0, zbEnd, dy, ny, path, c['mpicon'], c['mpinr'])
+                    else:
+                        check = 0         #een 0 geven als nmpi = 1
                         
                 elif checklist[l] in ['benchmarkcomp_m']:
                     zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
@@ -152,7 +174,7 @@ for i in range(len(u['tests'])):
                     
                 else:
                     check = 2                                                   # check = 2 means that the check is not performed or not finished correctly
-                
+                 
                 #WRITE CHECK TO DATABASE 
                 if checklist[l] in ['massbalance']: 
                      database.massbalance_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check, massbalance)

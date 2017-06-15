@@ -70,7 +70,7 @@ b = dict(shape = ['dune','dune','dune','dune','flat'],
          shorewidth = 60,                                                       
          dunewidth = 30,                                                        
          grex = 3,                                                               
-         grextype = 'no')    #later op both
+         grextype = 'both')    #later op both, no
 
     
 ###DICTIONARY FOR OTHER USER INPUT###    
