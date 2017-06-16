@@ -19,13 +19,8 @@ The source code of the scripts can be found at https://github.com/openearth/xbea
    :caption: Contents:
    
    project
-   user input
-   setup
-   xbeach
-   bathymetry
-   analysis
-   checks
-   database
+   scripts
+   avalanching
 
 Acknowledgements
 ================

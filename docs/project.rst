@@ -25,7 +25,11 @@ Structure of the diagnostic tests
 ---------------------------------
 
 The structure of different diagnostic tests is initially based on vital processes of XBeach as wave, flow, sediment transport and avalanching which are each tested in a seperate diagnostic test.
-Within this diagnostic tests you can have a subdivision of differenct tests/cases/runs/checks etc, see the user_input.py description for more info.
+Within this diagnostic tests you can have a subdivision of differenct tests/cases/runs/checks etc.
+Usually you want to differ certain parameters/options within a diagnostic test one at a time.
+This can be done by first specifying certain tests that should be varied, within these you can specify certain cases that should be varied.
+Within these you can have different runs and so on, see the avalanching diagnostic tests for an example.
+The variety of tests will later on be extended to other functionalities like the use of groundwater flow and vegetation.
 
 
 Structure of the scripts
@@ -40,10 +44,10 @@ Hereafter all these different models are run on the on the H6 cluster via the Te
 
 When everything is run in Xbeach the following step is to analyse the results, using the analyze_this.py.
 Here every run is subjected to a series of checks to see if the results are satisfactory, performed by checks.py.
-Every check gets a code 0 when the result is satisfactory, 1 when the check is run but the result is not satisfacty and 2 when the check was performed correctly.
+Every check gets a code 0 when the result is satisfactory, 1 when the check is run but the result is not satisfacty and 2 when the check was not performed correctly.
 These codes are stored in a SQL type database using the script database.py.
-The checks and database files are also shared amongst the different daignostic tests.
-At last the existence of a basic logfile should be mentioned.
+The checks and database files are also shared amongst the different diagnostic tests.
+At last the existence of basic logfiles should be mentioned.
 
 .. _fig-scripts-structure-overview:
 
