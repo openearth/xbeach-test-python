@@ -59,7 +59,7 @@ p = dict(
 #Varied values other than specified in dictionary p                             (in setup file the values of p-dictionary are over-written)
 usermorfac = [10]                                                              
 userdzmax = [0.05]                                                              
-userzs0 = [-1, 45]
+userzs0 = [-1, 50]
 tstoplong = 3000 
 
 

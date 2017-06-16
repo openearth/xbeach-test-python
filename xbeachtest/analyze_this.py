@@ -9,6 +9,7 @@ import logging
 import json
 import database
 import checks
+import matplotlib.pyplot as plt
 
 #Open dictionaries from test-files:
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
@@ -112,7 +113,7 @@ for i in range(len(u['tests'])):
                     
                 elif checklist[l] in ['m_slope']:
                     if u['tests'][i] in ['neg_x']:
-                        if u['cases'][j] in ['zs0_45']:
+                        if u['cases'][j] in ['zs0_50']:
                             slptheo = c['slptheo_cross_neg_wet']
                         elif u['cases'][j] in ['zs0_-1']:
                             slptheo = c['slptheo_cross_neg_dry']
@@ -120,7 +121,7 @@ for i in range(len(u['tests'])):
                             slptheo = c['slptheo_cross_neg_normal']
                             
                     elif u['tests'][i] in ['pos_x']:
-                        if u['cases'][j] in ['zs0_45']:
+                        if u['cases'][j] in ['zs0_50']:
                             slptheo = c['slptheo_cross_pos_wet']
                         elif u['cases'][j] in ['zs0_-1']:
                             slptheo = c['slptheo_cross_pos_dry']
@@ -133,23 +134,26 @@ for i in range(len(u['tests'])):
                     
                         
                 elif checklist[l] in ['n_slope']:
-                    if u['tests'][i] in ['pos_x', 'neg_x','hor']:   #'hor' should have a slope of 0, which is specified in slptheo_long
-                        slptheo = c['slptheo_long']             #Hier hoeft niks omgedraaid te worden omdat het om slopes van 0 gaat
-                    elif u['tests'][i] in ['neg_y']:
-                        if u['cases'][j] in ['zs0_45']:
-                            slptheo = c['slptheo_cross_neg_wet']
-                        elif u['cases'][j] in ['zs0_-1']:
-                            slptheo = c['slptheo_cross_neg_dry']
-                        else:
-                            slptheo = c['slptheo_cross_neg_normal']
-                            
-                    elif u['tests'][i] in ['pos_y']:
-                        if u['cases'][j] in ['zs0_45']:
-                            slptheo = c['slptheo_cross_pos_wet']
-                        elif u['cases'][j] in ['zs0_-1']:
-                            slptheo = c['slptheo_cross_pos_dry']
-                        else:
-                            slptheo = c['slptheo_cross_pos_normal']
+                    if runs[k] in ['benchmark','m3n1','m1n3','m3n3']:
+                        if u['tests'][i] in ['pos_x', 'neg_x','hor']:   #'hor' should have a slope of 0, which is specified in slptheo_long
+                            slptheo = c['slptheo_long']             #Hier hoeft niks omgedraaid te worden omdat het om slopes van 0 gaat
+                        elif u['tests'][i] in ['neg_y']:
+                            if u['cases'][j] in ['zs0_50']:
+                                slptheo = c['slptheo_cross_neg_wet']
+                            elif u['cases'][j] in ['zs0_-1']:
+                                slptheo = c['slptheo_cross_neg_dry']
+                            else:
+                                slptheo = c['slptheo_cross_neg_normal']
+                                
+                        elif u['tests'][i] in ['pos_y']:
+                            if u['cases'][j] in ['zs0_50']:
+                                slptheo = c['slptheo_cross_pos_wet']
+                            elif u['cases'][j] in ['zs0_-1']:
+                                slptheo = c['slptheo_cross_pos_dry']
+                            else:
+                                slptheo = c['slptheo_cross_pos_normal']
+                    else:
+                        check = 0
                     logger.debug('slptheo= %s', slptheo)                            
                     check = checks.n_slope(zb0, zbEnd, nx, ny, dy, c['slploc'], slptheo, c['slpcon'])       #check if correctly changed to 'slptheo' instead of 'c['slptheo_long']
                     
@@ -194,7 +198,27 @@ for i in range(len(u['tests'])):
                 else:
                      database.data_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
                      logger.debug('data_entry called for')
-                             
+                
+                #PLOT PROFILES (TEMP)
+                logger.debug('Initiate profile plotting sequence')
+                zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
+                plt.ioff()
+                plt.figure()
+                if u['tests'][i] in ['pos_x', 'neg_x','hor']:
+                    plt.plot(zbEndtrans_m, label="zbEnd")
+                    plt.plot(zb0trans_m, label="zb0")
+                elif u['tests'][i] in ['pos_y', 'neg_y']:
+                    plt.plot(zbEndtrans_n, label="zbEnd_middletransect")
+                    plt.plot(zb0trans_n, label="zb0_middletransect")
+                    
+                plt.title('Bed levels of middle transects perpendicular to the dune')
+                plt.xlabel('Grid cells (-)') # in direction perpendicular to dune')
+                plt.ylabel('Bed level (m)')
+                plt.legend()    
+                plt.grid()
+                plt.savefig(filename = os.path.join(path , 'profiles.png'))
+                plt.close()
+                logger.debug('End profile plotting sequence')
 #%%OUTPUT######################################################################
       
 #outside loop  -> the results should send error messages to the person responsible
