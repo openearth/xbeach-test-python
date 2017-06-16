@@ -59,17 +59,6 @@ At last the existence of basic logfiles should be mentioned.
    The blue boxes represent scripts that are shared between all diagnostic tests and that can be extended if a new functionality is needed.
    And the red box represents the shared script of openearth/xbeach-tools-python/xbeachtools. 
    
-For a description of the specific scripts of :numref:`fig-scripts-structure-overview` see:
-
-.. toctree::
-   :maxdepth: 1
-   
-   user input
-   setup
-   xbeach
-   bathymetry
-   analysis
-   checks
-   database
+For a description of the specific scripts see section 'Scripts'.
 
 
