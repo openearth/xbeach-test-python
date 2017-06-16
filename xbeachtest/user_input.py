@@ -55,12 +55,6 @@ p = dict(
         nglobalvar = ['zb','zs']) 
 
 
-###CASES USER INPUT###   
-#Varied values other than specified in dictionary p                             (in setup file the values of p-dictionary are over-written)
-usermorfac = [10]                                                              
-userdzmax = [0.05]                                                              
-userzs0 = [-1, 50]
-tstoplong = 3000 
 
 
 ###DICTIONARY FOR BATHYMETRY INPUT###   
@@ -84,6 +78,13 @@ u = dict(diroutmain = diroutmain,                                               
                                                    
     
 #%%VARYING PARAMETERS IN CASES#################################################     
+
+###CASES USER INPUT###   
+#Varied values other than specified in dictionary p                             (in setup file the values of p-dictionary are over-written)
+usermorfac = [10]                                                              
+userdzmax = [0.05]                                                              
+userzs0 = [-1, 50]
+tstoplong = 3000 
 
 usercase = len(usermorfac)+len(userdzmax)+len(userzs0)+1                        #+1 for the standard case
 cases = [0]*usercase

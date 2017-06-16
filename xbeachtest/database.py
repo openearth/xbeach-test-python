@@ -33,25 +33,25 @@ def massbalance_entry(modules, tests, cases, runs, checks, value, mass):
                (modules, tests, cases, runs, checks, value, mass))  
     conn.commit()  
     
-def read_zeros_from_db():      
-    db.execute('SELECT * FROM database WHERE check= 0')   
-    zeros = dict()
+def read_ones_from_db():      
+    db.execute('SELECT * FROM database WHERE check= 1')   
+    ones = dict()
     i=0
     for row in db.fetchall():
         i+=1
-        logger.debug('Check=0 for: %s', row)  
-        zeros['zeros', i] = row
-    return zeros
+        logger.debug('Check=1 for: %s', row)  
+        ones['ones', i] = row
+    return ones
 
-def read_halfs_from_db():       
-    db.execute('SELECT * FROM database WHERE check= 0.5')  
-    halfs = dict()
+def read_twos_from_db():       
+    db.execute('SELECT * FROM database WHERE check= 2')  
+    twos = dict()
     j=0
     for row in db.fetchall():
         j+=1
-        logger.debug('Check=0.5 for: %s', row)
-        halfs['halfs', j] = row
-    return halfs
+        logger.debug('Check=2 for: %s', row)
+        twos['twos', j] = row
+    return twos
     
 def close_database():
     db.close()
