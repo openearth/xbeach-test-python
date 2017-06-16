@@ -11,6 +11,8 @@ import database
 import checks
 import matplotlib.pyplot as plt
 
+revisionnr = os.getenv('SVN_REVISION')
+
 #Open dictionaries from test-files:
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 os.chdir(diroutmain) 
@@ -193,10 +195,10 @@ for i in range(len(u['tests'])):
                 
                 #WRITE CHECK TO DATABASE 
                 if checklist[l] in ['massbalance']: 
-                     database.massbalance_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check, massbalance)
+                     database.massbalance_entry(revisionnr, u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check, massbalance)
                      logger.debug('massbalance_entry called for')
                 else:
-                     database.data_entry(u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
+                     database.data_entry(revisionnr, u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
                      logger.debug('data_entry called for')
                 
                 #PLOT PROFILES (TEMP)
@@ -219,17 +221,23 @@ for i in range(len(u['tests'])):
                 plt.savefig(filename = os.path.join(path , 'profiles.png'))
                 plt.close()
                 logger.debug('End profile plotting sequence')
+                
 #%%OUTPUT######################################################################
       
 #outside loop  -> the results should send error messages to the person responsible
 #--> This can also be done in a seperate script (especially if tests for other modules are added to the same database)
 #==============================================================================
-# zeros = database.read_zeros_from_db()   #NOG KIJKEN OF JE DIT ANDERS WILT
+#zeros = database.read_ones_from_db()   #NOG KIJKEN OF JE DIT ANDERS WILT
 # 
-# halfs = database.read_halfs_from_db() 
+#halfs = database.read_twos_from_db() 
 # 
-# #massbalance = database.read_massbalance_from_db()  --> evt nog maken
+#database.close_database()
 # 
-# database.close_database()
-# 
+#with open(os.path.join(diroutmain, 'ones.txt'), 'w') as fp:
+#    fp.write(ones)   
+#    fp.close()
+#    
+#with open(os.path.join(diroutmain, 'twos.txt'), 'w') as fp:
+#    fp.write(twos)   
+#    fp.close()
 #==============================================================================
