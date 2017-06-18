@@ -55,14 +55,14 @@ class Bathymetry(XBeachBathymetry):
             ws = coefw * vcmol / dss * (np.sqrt(1.0 + (s-1.0)*ag*dss**3 / (100.0*vcmol**2)) - 1.0)
         else:
             ws = 1.1 * np.sqrt((s-1.0)*ag*dss)
-        print('ws= ', ws)
+        logger.debug('ws= ', ws)
         return ws
            
     def dean1(self, zmin, zmax, beta_dry, height = 0):        #based on OET: dean_beach_profile.m (not exactly the same)
         logger.info('dean profile 1 is called for')        #beta_dry is the dry slope (above z=0)
         x = np.arange(-10000, 10000, self.dx)
         vfall = self.fall_velocity_vanrijn2007()
-        print('vfall= ',vfall)
+        logger.debug('vfall= ',vfall)
         a = 0.51 * vfall ** 0.44
         z = -a*np.power(abs(x), self.m)
         z2 = -beta_dry*x

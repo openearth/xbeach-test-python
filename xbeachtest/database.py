@@ -34,7 +34,7 @@ def massbalance_entry(revision, modules, tests, cases, runs, checks, value, mass
     conn.commit()  
     
 def read_ones_from_db():      
-    db.execute('SELECT * FROM XBdiagnostic WHERE check= 1')   
+    db.execute('SELECT * FROM XBdiagnostic WHERE check= 1')   ##AANPASSEN --> JE WILT ALLEEN KIJKEN VOOR HET REVISIENUMMER DAT JE DRAAIT!!!
     ones = dict()
     i=0
     for row in db.fetchall():
