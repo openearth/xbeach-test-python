@@ -201,26 +201,29 @@ for i in range(len(u['tests'])):
                      database.data_entry(revisionnr, u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
                      logger.debug('data_entry called for')
                 
-                #PLOT PROFILES (TEMP)
-                logger.debug('Initiate profile plotting sequence')
-                zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
-                plt.ioff()
-                plt.figure()
-                if u['tests'][i] in ['pos_x', 'neg_x','hor']:
-                    plt.plot(zbEndtrans_m, label="zbEnd")
-                    plt.plot(zb0trans_m, label="zb0")
-                elif u['tests'][i] in ['pos_y', 'neg_y']:
-                    plt.plot(zbEndtrans_n, label="zbEnd_middletransect")
-                    plt.plot(zb0trans_n, label="zb0_middletransect")
-                    
-                plt.title('Bed levels of middle transects perpendicular to the dune')
-                plt.xlabel('Grid cells (-)') # in direction perpendicular to dune')
-                plt.ylabel('Bed level (m)')
-                plt.legend()    
-                plt.grid()
-                plt.savefig(filename = os.path.join(path , 'profiles.png'))
-                plt.close()
-                logger.debug('End profile plotting sequence')
+            #PLOT PROFILES (TEMP)
+            logger.debug('Initiate profile plotting sequence')
+            zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
+            plt.ioff()
+            plt.figure()
+            if u['tests'][i] in ['pos_x', 'neg_x','hor']:
+                plt.plot(zb0trans_m, label="zb0", color= 'k')
+                plt.plot(zbEndtrans_m, label="zbEnd", color= 'r')
+                
+            elif u['tests'][i] in ['pos_y', 'neg_y']:
+                plt.plot(zb0trans_n, label="zb0", color='k')
+                plt.plot(zbEndtrans_n, label="zbEnd", color= 'r')
+                
+                
+            plt.title('Bed levels of middle transects perpendicular to the dune')
+            plt.xlabel('Grid cells (-)') # in direction perpendicular to dune')
+            plt.ylabel('Bed level (m)')
+            plt.legend(loc= 4) 
+            plt.grid()
+            plt.savefig(filename = os.path.join(path , 'profiles-test.png'))
+            plt.close()
+            logger.debug('End profile plotting sequence')
+                
                 
 #%%OUTPUT######################################################################
       

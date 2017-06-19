@@ -11,8 +11,8 @@ logger = logging.getLogger(__name__)
 logger.info('checks.py is called for')
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC')
-#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"               #TERUGZETTEN!!!
-path = os.path.join(diroutmain,'xbeachtest-results.db')            #TERUGZETTEN!!!
+#diroutmain = "P:/xbeach/skillbed/diagnostic/"               #TERUGZETTEN!!!
+path = os.path.join(diroutmain,'xbeachtest-results.db')            #-test- TERUGZETTEN!!!
 conn = sqlite3.connect(path)     #':memory:'  to store in memory
 logger.info("Opened database successfully")
 
@@ -33,25 +33,27 @@ def massbalance_entry(revision, modules, tests, cases, runs, checks, value, mass
                (revision, modules, tests, cases, runs, checks, value, mass))  
     conn.commit()  
     
-def read_ones_from_db():      
-    db.execute('SELECT * FROM XBdiagnostic WHERE check= 1')   ##AANPASSEN --> JE WILT ALLEEN KIJKEN VOOR HET REVISIENUMMER DAT JE DRAAIT!!!
+def read_ones_from_db(revisionnr):      
+    logger.debug('chosen revisionnr= %s', revisionnr)
+    db.execute('SELECT * FROM XBdiagnostic WHERE revision= (?) AND value= (?)', (float(revisionnr),float(1)))   ##AANPASSEN --> JE WILT ALLEEN KIJKEN VOOR HET REVISIENUMMER DAT JE DRAAIT!!!
     ones = dict()
     i=0
     for row in db.fetchall():
         i+=1
         logger.debug('Check=1 for: %s', row)  
-        ones['ones', i] = row
-    return ones
+        ones[i] = row#str(row)
+    return ones, i
 
-def read_twos_from_db():       
-    db.execute('SELECT * FROM XBdiagnostic WHERE check= 2')  
+def read_twos_from_db(revisionnr):       
+    logger.debug('chosen revisionnr= %s', revisionnr)
+    db.execute('SELECT * FROM XBdiagnostic WHERE revision= (?) AND value= (?)', (float(revisionnr),float(2)))  #WHERE revision = revisionnr and value= 2
     twos = dict()
     j=0
     for row in db.fetchall():
         j+=1
         logger.debug('Check=2 for: %s', row)
-        twos['twos', j] = row
-    return twos
+        twos[j] = row#str(row)
+    return twos, j
     
 def close_database():
     db.close()

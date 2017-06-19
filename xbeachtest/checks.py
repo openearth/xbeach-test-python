@@ -73,7 +73,7 @@ def midtrans(zb0, zbEnd, ny): #(Middle transect)
 def slope(zbtrans, dd, nd):                                                     #dd = dx or dy, nd = nx or ny
     slp = np.zeros(nd)
     for i in range(nd):
-        slp[i] = (abs(zbtrans[i+1]-zbtrans[i])/dd)
+        slp[i] = ((zbtrans[i+1]-zbtrans[i])/dd)  #MOET ABS WEG?????????????
     return slp
 
 ###CHECK: Slope m-direction###                                                  
@@ -122,7 +122,7 @@ def n_slope(zb0, zbEnd, nx, ny, dy, slploc, slptheo, slpcon):
                 check = 0                   
                 logger.debug('check= %s because slope= %s', check, slope_n[slploc[b]])     
     else:
-        check = 2 #let 1D cases get a code 2
+        check = 0 #let 1D cases get a code 0, or is 2 better?
 #        raise ValueError('ny>0 expected, got:', ny)
     return check
 
@@ -135,14 +135,15 @@ def m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, dr, mpicon, mpinr):                     
         zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = midtrans(zb0, zbEnd, ny)
         slope_m = slope(zbEndtrans_m, dx, nx)
         mpidim = mpidims(dr)               
-        locm2 = int(mpidim[:,1][mpinr]) + 3                                     #Note: The overlap of the mpi domains is 3 cells    
-        locm1 = locm2 - 3                                                       #You want locm1 to be before the MPI-boundary
+        locm2 = int(mpidim[:,1][mpinr]) + 0                                     #Note: The overlap of the mpi domains is 3 cells    
+        locm1 = locm2 - 1                                                       #You want locm1 to be before the MPI-boundary
         zbEnd_locm2 = zbEndtrans_m[locm2]
         zbEnd_locm1 = zbEndtrans_m[locm1]
         deltareal_m= zbEnd_locm2 - zbEnd_locm1
-        deltatheory_m=slope_m[locm1-0] * (locm2 - locm1) * dx 
+        deltatheory_m=slope_m[locm1-0] * (locm2 - locm1) * dx #kijken naar die -0
         delta_m=abs(deltareal_m-deltatheory_m)
-        
+        logger.debug('locm2= %s, locm1= %s, slope_m[locm1]= %s, deltareal_m= %s and deltatheory_m= %s', locm2, locm1, slope_m[locm1], deltareal_m, deltatheory_m)
+
         #checking
         if delta_m > mpicon:
             check = 1
@@ -163,14 +164,14 @@ def n_mpi(nmpi, zb0, zbEnd, dy, ny, dr, mpicon, mpinr):
         zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = midtrans(zb0, zbEnd, ny)
         slope_n = slope(zbEndtrans_n, dy, ny)
         mpidim = mpidims(dr)               
-        locn2 = int(mpidim[:,3][mpinr]) + 3                                             
-        locn1 = locn2 - 3                                                       
+        locn2 = int(mpidim[:,3][mpinr]) + 0                                             
+        locn1 = locn2 - 1                                                       
         zbEnd_locn2 = zbEndtrans_n[locn2]
         zbEnd_locn1 = zbEndtrans_n[locn1]
         deltareal_n= zbEnd_locn2 - zbEnd_locn1
-        deltatheory_n=slope_n[locn1-0] * (locn2 - locn1) * dy
+        deltatheory_n=slope_n[locn1-0] * (locn2 - locn1) * dy  #kijken naar die -0
         delta_n=abs(deltareal_n-deltatheory_n)
-        
+        logger.debug('locn2= %s, locn1= %s, slope_n[locn1]= %s, deltareal_n= %s and deltatheory_n= %s', locn2, locn1, slope_n[locn1], deltareal_n, deltatheory_n)
         #checking
         if delta_n > mpicon:
             check = 1
