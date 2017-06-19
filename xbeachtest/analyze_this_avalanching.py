@@ -21,7 +21,7 @@ dirout = os.path.join(diroutmain, 'xbeachtest-avalanching-analyze_this.log')
 logging.basicConfig(filename= dirout, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
 logger = logging.getLogger(__name__)
 logger.info('diroutmain= %s', diroutmain)
-logger.info('analyze_this.py is called for')
+logger.info('analyze_this_avalanching.py is called for')
 
 with open('dictB_avalanching.txt', 'r') as f:
     b = json.load(f)    
@@ -195,17 +195,17 @@ for i in range(len(u['tests'])):
                 
                 #WRITE CHECK TO DATABASE 
                 if checklist[l] in ['massbalance']: 
-                     database.massbalance_entry(revisionnr, u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check, massbalance)
+                     database.massbalance_entry(revisionnr, u['module'], u['tests'][i], u['cases'][j], '', runs[k], checklist[l], check, massbalance)
                      logger.debug('massbalance_entry called for')
                 else:
-                     database.data_entry(revisionnr, u['module'], u['tests'][i], u['cases'][j], runs[k], checklist[l], check)
+                     database.data_entry(revisionnr, u['module'], u['tests'][i], u['cases'][j], '', runs[k], checklist[l], check)
                      logger.debug('data_entry called for')
                 
             #PLOT PROFILES (TEMP)
             logger.debug('Initiate profile plotting sequence')
             zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
             plt.ioff()
-            plt.figure()
+            plt.figure(figsize=(10.0, 5.0))
             if u['tests'][i] in ['pos_x', 'neg_x','hor']:
                 plt.plot(zb0trans_m, label="zb0", color= 'k')
                 plt.plot(zbEndtrans_m, label="zbEnd", color= 'r')
@@ -223,24 +223,3 @@ for i in range(len(u['tests'])):
             plt.savefig(filename = os.path.join(path , 'profiles-test.png'))
             plt.close()
             logger.debug('End profile plotting sequence')
-                
-                
-#%%OUTPUT######################################################################
-      
-#outside loop  -> the results should send error messages to the person responsible
-#--> This can also be done in a seperate script (especially if tests for other modules are added to the same database)
-#==============================================================================
-#zeros = database.read_ones_from_db()   #NOG KIJKEN OF JE DIT ANDERS WILT
-# 
-#halfs = database.read_twos_from_db() 
-# 
-#database.close_database()
-# 
-#with open(os.path.join(diroutmain, 'ones.txt'), 'w') as fp:
-#    fp.write(ones)   
-#    fp.close()
-#    
-#with open(os.path.join(diroutmain, 'twos.txt'), 'w') as fp:
-#    fp.write(twos)   
-#    fp.close()
-#==============================================================================

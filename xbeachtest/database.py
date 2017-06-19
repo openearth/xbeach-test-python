@@ -21,16 +21,16 @@ db = conn.cursor()
 #%%FUNCTIONS REGARDING THE DATABASE############################################
 
 def create_table():
-    db.execute('CREATE TABLE IF NOT EXISTS XBdiagnostic(revision REAL, modules TEXT, tests TEXT, cases TEXT, runs TEXT, checks TEXT, value REAL, massbalance REAL)')  
+    db.execute('CREATE TABLE IF NOT EXISTS XBdiagnostic(revision REAL, modules TEXT, tests TEXT, cases TEXT, subcases TEXT, runs TEXT, checks TEXT, value REAL, massbalance REAL)')  
              
-def data_entry(revision, modules, tests, cases, runs, checks, value):
-    db.execute("INSERT INTO XBdiagnostic(revision, modules, tests, cases, runs, checks, value) VALUES (?, ?, ?, ?, ?, ?, ?)",  #when using SQL the '?' should maybe be replaced by '%s'
-              (revision, modules, tests, cases, runs, checks, value))
+def data_entry(revision, modules, tests, cases, subcases, runs, checks, value):
+    db.execute("INSERT INTO XBdiagnostic(revision, modules, tests, cases, subcases, runs, checks, value) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",  #when using SQL the '?' should maybe be replaced by '%s'
+              (revision, modules, tests, cases, subcases, runs, checks, value))
     conn.commit()  
     
-def massbalance_entry(revision, modules, tests, cases, runs, checks, value, mass):
-    db.execute("INSERT INTO XBdiagnostic(revision, modules, tests, cases, runs, checks, value, massbalance) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", 
-               (revision, modules, tests, cases, runs, checks, value, mass))  
+def massbalance_entry(revision, modules, tests, cases, subcases, runs, checks, value, mass):
+    db.execute("INSERT INTO XBdiagnostic(revision, modules, tests, cases, subcases, runs, checks, value, massbalance) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)", 
+               (revision, modules, tests, cases, subcases, runs, checks, value, mass))  
     conn.commit()  
     
 def read_ones_from_db(revisionnr):      

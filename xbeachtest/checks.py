@@ -29,12 +29,12 @@ def bedlevelchange(zb0, zbEnd):
     return check
     
 ###CHECK: Mass balance### 
-def massbalance(zb0, zbEnd, dx, dy, massbalancecon):                            
+def massbalance(z0, zEnd, dx, dy, massbalancecon):                              #applicable to zs and zb                            
     logger.info('Mass balance is called for') 
     
     #processing
-    mass0 = zb0.sum() * dx * dy
-    massEnd = zbEnd.sum() * dx * dy
+    mass0 = z0.sum() * dx * dy
+    massEnd = zEnd.sum() * dx * dy
     massbalance = massEnd - mass0   # WIL JE DIT NOG IN m3/m LATEN ZIEN OF IS DIT NIET RELEVANT MEER?
     logger.debug('massbalance= %s m3', massbalance) 
     
@@ -47,7 +47,93 @@ def massbalance(zb0, zbEnd, dx, dy, massbalancecon):
         logger.debug('check= %s --> too much mass leaving the model', check)  
     else:
         check = 0           
-    return check, massbalance    
+    return check, massbalance 
+
+###CHECK: Mass balance in time### 
+def massbalance_intime(z, dx, dy, massbalancecon_intime):                       #applicable to zs and zb                  
+    logger.info('Mass balance in time is called for') 
+    z0 = z[0,:,:]
+    massbalance_intime = np.zeros(len(z[:,0,0]))
+    
+    for i in range(len(massbalance_intime)):
+        #processing
+        mass0 = z0.sum() * dx * dy
+        massuse = z[i,:,:].sum() * dx * dy
+        massbalance_intime [i] = massuse - mass0   # WIL JE DIT NOG IN m3/m LATEN ZIEN OF IS DIT NIET RELEVANT MEER?
+        
+        
+        #checking
+        if massbalance_intime[i] > massbalancecon_intime:
+            check = 1
+            logger.debug('check= %s --> too much mass entering the model', check)   
+            break           
+        elif massbalance_intime[i] < -massbalancecon_intime:
+            check = 1
+            logger.debug('check= %s --> too much mass leaving the model', check)
+            break
+        else:
+            check = 0 
+    logger.debug('massbalance at final timestep= %s m3', massbalance_intime[-1])           
+    return check, massbalance_intime    
+
+###CHECK: WAVE BOUNDARY CONDITIONS
+def wave_generation(H, ue, ve, ui, vi, xloc, tstart):     
+    #processing        
+    Hmean = np.mean(H[int(tstart):-1, :, xloc])  #[time, y, x]
+    uemean = np.mean(ue[int(tstart):-1, :, xloc]) 
+    vemean = np.mean(ve[int(tstart):-1, :, xloc]) 
+    if xloc == 0:
+        uimean = np.mean(ui[int(tstart):-1, :, xloc])
+        vimean = np.mean(vi[int(tstart):-1, :, xloc])
+        if uimean == 0:  
+            check = 1
+            logger.debug('check= %s --> uimean ==0 at xloc= %s', check, xloc)        
+        elif vimean == 0:  
+            check = 1        
+            logger.debug('check= %s --> vimean ==0 at xloc= %s', check, xloc)  
+    else:
+        logger.debug('ui and vi can only be checked at the offshore boundary grid cells for xloc==0, got xloc= %s', xloc)
+        uimean = 0
+        vimean = 0
+        check = 0
+    #checking
+    if Hmean == 0:  #or is abs(Hmean) <0.0001 better?
+        check = 1
+        logger.debug('check= %s --> Hmean ==0 at xloc= %s', check, xloc)        
+    elif uemean == 0:  
+        check = 1
+        logger.debug('check= %s --> uemean ==0 at xloc= %s', check, xloc)        
+    elif vemean == 0:  
+        check = 1
+        logger.debug('check= %s --> vumean ==0 at xloc= %s', check, xloc)                  
+    else:
+        logger.debug('check= %s --> H, ue, ve, ui and vi are >0 at xloc= %s', xloc)
+        check = 0
+    return check 
+   
+###CHECK: Hrms DIFFERENCES ALONG Y AXIS
+def n_Hrms(H, ny, tstart, Hrmsconstraint):  
+    Hmean_all = np.mean(H[int(tstart):-1,:,:])  #[time, y, x]
+    Hmean_ratio = np.zeros(ny)
+    for i in range(ny):
+        
+        Hmean_y = np.mean(H[int(tstart):-1,i,:])
+        Hmean_ratio[i] = Hmean_y / Hmean_all
+        
+    for j in range(ny):
+        if Hmean_ratio[j] > (1+Hrmsconstraint): 
+            print('error Hmean >%s', (1+Hrmsconstraint))
+            check = 1
+            break
+            
+        elif Hmean_ratio[j] <(1-Hrmsconstraint):
+            print('error Hmean <%s', (1-Hrmsconstraint))
+            check = 1
+            break   #? --> Je wilt niet dat check weer op 1 wordt gezet als er een goede na een slechte komt
+        else:
+            check = 0
+    
+    return check, Hmean_ratio 
         
 #%%CHECKS OVER MIDDLE TRANSECT#################################################  
 
@@ -210,64 +296,4 @@ def rmse_comp(zbEndbench, zbEnd, ny, rmsecon):
         logger.debug('check= %s', check)
     return check   
 
-###CHECK: WAVE BOUNDARY CONDITIONS
-def wave_generation(H, ue, ve, ui, vi, xloc):     #    Checken of er H, ue, ve, ui, vi aangemaakt worden
-        
-#    xloc = x grid cell waar je wilt kijken of er golven gegenereet worden (meestal xloc = 0)
-#    voor offshore kant doe je hem dan een keer met xloc = 0, en ook een keer met xloc = ... (iets voor de kust)
 
-    #processing
-    Hmean = np.mean(H[:,:,xloc])  #[time, y, x]
-    uemean = np.mean(ue[:,:,xloc]) 
-    vemean = np.mean(ve[:,:,xloc])
-    if xloc == 0:
-        uimean = np.mean(ui[:,:,xloc])
-        vimean = np.mean(vi[:,:,xloc])
-    else:
-        logger.debug('ui and vi can only be checked at the offshore boundary grid cells for xloc=0, got xloc= %s', xloc)
-        uimean = 0
-        vimean = 0
-        
-    #checking
-    if Hmean == 0:  #of overal <0.0001 ?
-        logger.debug('error Hmean ==0')
-        check = 1
-    elif uemean == 0: 
-        logger.debug('error uemean ==0')
-        check = 1
-    elif vemean == 0:  
-        logger.debug('error vumean ==0')
-        check = 1
-    elif uimean == 0: 
-        logger.debug('error uimean ==0')
-        check = 1
-    elif vimean == 0: 
-        logger.debug('error vimean ==0')
-        check = 1
-    else:
-        logger.debug('H, ue, ve, ui and vi are >0 at xloc= %s', xloc)
-        check = 0
-    return check
-    
-###CHECK: Hrms DIFFERENCES ALONG Y AXIS
-def n_Hrms(H, ny):
-    
-    #processing
-    Hmean_all = np.mean(H[:,:,:])                                               #[time, y, x]
-    Hmean_ratio = np.zeros(len(ny))
-    
-    for i in range(ny):        
-        Hmean_y = np.mean(H[:,i,:])
-        Hmean_ratio[i] = Hmean_y / Hmean_all
-        
-    #checking
-        if Hmean_ratio[i] > 0.4: #bijv 0.4 --> constraint aanmaken
-            logger.debug('error Hmean >0.4')
-            check = 1            
-        elif Hmean_ratio[i] <0.2:
-            logger.debug('error Hmean >0.4')
-            check = 1            
-        else:
-            check = 0
-    
-    return check, Hmean_ratio #Hmean_ratio --> usefull to make a plot of?

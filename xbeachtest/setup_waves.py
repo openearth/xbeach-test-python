@@ -17,7 +17,7 @@ logger.info('setup.py is called for')
 #%%MAKING THE FOLDER STRUCTURE#################################################
 
 ###MODULES###
-logger.info( u['module'])
+logger.info(u['module'])
 
 ###TESTS### 
 for i in range(len(u['tests'])): 

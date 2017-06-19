@@ -8,7 +8,8 @@ import logging
 import os
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-#diroutmain = "C:/Users/Leijnse/Desktop/Checkouts/openearth/xbeach-test-python/xbeachtest/"
+#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"
+
 path = os.path.join(diroutmain, 'xbeachtest-waves-setup.log')
 
 logging.basicConfig(filename= path, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
@@ -71,7 +72,7 @@ b = dict(height = 2,
          zmin = -17, 
          zmax = 3, 
          beta_dry = 0.1,                                                          
-         length = 1000,                                                                                                                
+         length = 2000,                                                                                                                
          grex = 3,                                                               
          grextype = 'both')  
 
@@ -96,24 +97,28 @@ u = dict(diroutmain = diroutmain,
 #%%INPUT FOR ANALYSIS OF RESULTS###############################################
 
 ###DICTIONARY FOR CHECKS###
-c = dict(               
-        individualchecks=['massbalance_zb','massbalance_zs','wave_generation','n_Hrms'], 
-        comparisonchecks=['benchmarkcomp_m', 'benchmarkcomp_n'],        
-        massbalanceconstraint = 5) #m3     
+c = dict(checks_ind= ['bedlevelchange_zb','bedlevelchange_zs','massbalance_zb','massbalance_zs','wave_generation_offshore','wave_generation_coast','n_Hrms'], 
+        checks_comp= [],#'benchmarkcomp_m', 'benchmarkcomp_n'], 
+        xloc1= 0,
+        xloc2= 201,
+        tstart= 5*60/p['tintg'],
+        Hrmsconstraint= 0.10,
+        massbalancecon_intime= 250000,
+        massbalancecon= 5) #m3     
         
 
 #%%MAKING THE DICTIONARY TEXT FILES############################################ 
-with open(os.path.join(diroutmain, 'Bdict_waves.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictB_waves.txt'), 'w') as f:
     json.dump(b, f, indent=4)
 
-with open(os.path.join(diroutmain, 'Cdict_waves.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictC_waves.txt'), 'w') as f:
     json.dump(c, f, indent=4)
 
-with open(os.path.join(diroutmain, 'Pdict_waves.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictP_waves.txt'), 'w') as f:
     json.dump(p, f, indent=4)
     
-with open(os.path.join(diroutmain, 'Udict_waves.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictU_waves.txt'), 'w') as f:
     json.dump(u, f, indent=4)  
     
-with open(os.path.join(diroutmain, 'Wdict_waves.txt'), 'w') as f:
+with open(os.path.join(diroutmain, 'dictW_waves.txt'), 'w') as f:
     json.dump(w, f, indent=4)
