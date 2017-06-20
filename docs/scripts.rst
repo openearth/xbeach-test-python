@@ -116,5 +116,5 @@ It uses a SLQ type database, for now sqlite3 for Python as a local database.
 
 read_from_database
 ------------------
-read_from_database.py is a script to read the one and two codes from the database.
+read_from_database.py is a script to read the one and two codes from the database for a specific revision of the trunk version of XBeach.
 When error codes have occurred these are send to the necessary recipients.

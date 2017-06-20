@@ -60,7 +60,7 @@ All the scripts and their input can be found at https://github.com/openearth/xbe
 
 
 user_input_avalanching
-----------
+----------------------
 
 What can be noticed here are the different dictionaries based on the parameters/options/setup explained before.
 To this can be added that an extra section in the script is made to make the different cases in such a way that an extra parameter value can easily be added.
@@ -71,7 +71,7 @@ The last thing is that for a case with dzmax=0.05 you need a longer runtime 'tst
 
 
 setup_avalanching
------
+-----------------
 
 The first part of the script makes the folder structure and varies the specific parameters as needed.
 Thereafter XBeachModel from xbeach.py and Bathymetry of bathy.py are the classes used to make the bathymetry and XBeach input files.
@@ -84,7 +84,7 @@ Thereafter XBeachModel is used to write all files into the needed folder.
 
 
 analyze_this_avalanching
-------------
+------------------------
 
 After all the different XBeach models have run the results can be analysed.
 First the dictionaries are loaded from the text files, after which the loops of the folder structure are used.
