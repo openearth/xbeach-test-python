@@ -20,7 +20,6 @@ The tests will be similar to integration tests, as often used in software testin
 Therefore the name of diagnostic tests is chosen, with the goal of testing specific processes and functionalities of XBeach.
 
 
-
 Structure of the diagnostic tests
 ---------------------------------
 

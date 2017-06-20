@@ -21,6 +21,7 @@ The source code of the scripts can be found at https://github.com/openearth/xbea
    project
    scripts
    avalanching
+   waves
 
 Acknowledgements
 ================
@@ -28,8 +29,6 @@ Acknowledgements
 The project is initially developed by Tim Leijnse at Deltares as part of an internship regarding 'Developing diagnostic tests for XBeach' (insert link to TUD repository).
 
 The project is currently maintained by `Bas Hoonhout <bas.hoonhout@deltares.nl>`_ at Deltares.
-
-(temporary test...)
 
 Indices and tables
 ==================

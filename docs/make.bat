@@ -9,7 +9,7 @@ if "%SPHINXBUILD%" == "" (
 )
 set SOURCEDIR=.
 set BUILDDIR=_build
-set SPHINXPROJ=xbeachtest
+set SPHINXPROJ=XBdiagnostic
 
 if "%1" == "" goto help
 

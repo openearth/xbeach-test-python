@@ -1,7 +1,13 @@
 Scripts
 ==========
 
-In this section the general structure of all the scripts will be explained, the specific implementation for the diagnostic tests is explained in their specific sections.
+In this section the general structure of all the scripts will be explained, the specific implementation for the diagnostic tests is explained per diagnostic test.
+
+.. _fig-scripts-structure-overview:
+
+.. figure:: images/Overview_scripts.png
+   :width: 600px
+   :align: center
 
 
 user_input
@@ -43,7 +49,7 @@ xbeach.py is part of xbeach-tools-python (https://github.com/openearth/xbeach-to
 The script from the Python 3 branch is used, because all the other scripts are made to be compatible with Python 3 (and if possible Python 2 as well)
 From this script the class XBeachModel is used to construct the XBeach input files.
 For the class XBeachBathymetry the functionalities 'mirror', 'turn' and 'gridextend' are created, which are used to first extend the grid by copying the last grid cells for a specified number of times.
-Thereafter the bathymetry is mirrored when specified, and the grid and bathymetry can be turn 90 degrees as well.
+Thereafter the bathymetry is mirrored when specified, and the grid and bathymetry can be turned 90 degrees as well.
 
 
 bathy
@@ -54,6 +60,13 @@ The structure of the script is that you have certain 'general building blocks' a
 The first contains general shapes as a dean profile, horizontal bottom and a linear slope as well as a function to make a grid longshore uniform.
 The second contains different profiles which are combinations of the general building blocks, here you can think of a 2D dean profile or a partly horizontal and partly sloping profile.
 Both parts of the script can be extended with any profile desired.
+
+Current building blocks consist of 'dean1' (based on OET: dean_beach_profile.m, more general than dean2) and 'dean2' (more specific use of Dean profile based on Coastal Dynamics 1 lecture notes).
+As well as 'hor' for a horizontal bed, 'sloping' for a sloping bed and the option 'yuniform' to convert a 1D profile into a longshore uniform 2D profile.
+Current profiles consist of 'flat_1d' and 'flat_2d' which are flat profiles as the name suggests. 
+Furthermore there is 'dune_1d' and 'dune_2d' which are a combination of a Dean profile (dean2) for the offshore part and a sloping profile for the onshore part.
+And at last there is 'dean1_2d' which is added later for the diagnostic test for waves, which consists of an full 2D Dean profile based on dean1
+
 
 Running the scripts
 -------------------
@@ -75,6 +88,7 @@ In this generic file different kinds of checks are specified with all a specific
 If a check has a satisfactory result it gets check = 0, if the test has run but the result is unsatisfactory it gets check = 1.
 When a check is called for but something went wrong it gets check = 2.
 
+
 The results of all performed checks are stored in a database using database.py.
 From here all checks with a value > 0 can be used to send an error message to the responsible person.
 
@@ -89,8 +103,18 @@ It contains checks that are performed over the whole grid (e.g. a mass balance c
 Herefore there are also some additional functions to filter out the middle transect or calculating the slope per grid cell.
 The output of all checks is a single value.
 
+Current checks can be devided into checks on the whole grid and checks on a middle transect.
+For the first there is 'bedlevelchange', looking if there is bed level change at all, 'massbalance', looking at the mass balance (can be used for 'zb' as well as 'zs') and 'massbalance_intime' checks the mass balance in time.
+For waves there is 'wave_generation' which looks on a specific location (e.g. at the offshore boundary or close to the coast) whether waves are created, and there is 'n_Hrms' which looks along the grid cells of the n-direction whether there is a large deviation in mean Hrms along the m-transect compared to the mean Hrms of the whole grid.
+For checks using a middle transect there are checks for checking slope in m- and n-direction ('m_slope' and 'n_slope'), bed levels across mpi boundaries in both directions ('m_mpi' and 'n_mpi') and 'rmse_comp' which calculated the Root Mean Squared Error between the final bed level of a middle transect of a run and the corresponding benchmark run.
 
 database
 --------
 database.py is a script to make and use a database to store the results of the checks per module/test/case/run/check, and is shared between the diagnostic tests. 
 It uses a SLQ type database, for now sqlite3 for Python as a local database.
+
+
+read_from_database
+------------------
+read_from_database.py is a script to read the one and two codes from the database.
+When error codes have occurred these are send to the necessary recipients.
