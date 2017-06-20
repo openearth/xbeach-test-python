@@ -46,12 +46,12 @@ if u == None:
 else:
     logger.info('dictionary u is read from text file')
     
-with open('dictU_waves.txt', 'r') as f:
-    u = json.load(f)    
-if u == None:
-    logger.info('dictionary u is not succesfully read from text file')
+with open('dictW_waves.txt', 'r') as f:
+    w = json.load(f)    
+if w == None:
+    logger.info('dictionary w is not succesfully read from text file')
 else:
-    logger.info('dictionary u is read from text file')
+    logger.info('dictionary w is read from text file')
     
 #The result per check will be put in a database using:    
 database.create_table()                                         ###TESTEN OF DIT GOED GAAT OMDAT JE AL EEN TABEL HEBT AANGEMAAKT... OF KAN HET DAAROM WEG ZOLANG AVALANCHING ANALYSE MAAR EERST GEDRAAID WORDT?
@@ -109,8 +109,6 @@ for i in range(len(u['tests'])):
                     dy = parameter.getncattr('dy')
                     nx = parameter.getncattr('nx')
                     ny = parameter.getncattr('ny')
-                    mmpi = parameter.getncattr('mmpi') 
-                    nmpi = parameter.getncattr('nmpi') 
                             
 ###PERFORMING CHECKS###            
                 checklist = []
