@@ -60,4 +60,15 @@ At last the existence of basic logfiles should be mentioned.
    
 For a description of the specific scripts see section 'Scripts'.
 
+Development of diagnostic tests
+-------------------------------
 
+During the development of the framework for diagnostic tests at first a test for the XBeach module of Avalanching was created.
+The tests were aloborately tested and showed the potential of diagnostic tests, since multiple bugs were bound in the XBeach code.
+Thereafter the first steps for a diagnostic test for waves was made, however this is not completely finished and tested yet.
+
+For the future the vision is to first develop diagnostic tests for all vital XBeach processes of waves, flow, sediment transport, morphology and avalanching.
+With this structured approach it gets more easy to pinpoint where in the code something goes as the result of a change in the source code .
+Also the code of XBeach gets improved as a beneficial side effect when bugs are found.
+
+Thereafter other functionalities like groundwaterflow and vegetation can also get dedicated diagnostic tests to also ensure their performance in time.
