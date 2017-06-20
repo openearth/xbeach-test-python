@@ -1,11 +1,5 @@
 Diagnostic test for Waves 
 =========================
-(under construction)
-
-
-Zeggen dat ie nog niet volledig uitontwikkeld is, voorbeelden noemen wat nog gedaan moet worden en hoe het uitgebreid kan worden
-
-
 
 In this section the implementation of the general setup of scripts as explained in 'Scripts' for the testing of the module Waves will be explained.
 
@@ -26,8 +20,8 @@ Because wave are now added to the XBeach model, a wave spectrum should be specif
 In here a wave height Hm0 of 3m is specified, together with Tp=8s, an altering wave angle 'mainang', an altering value for 's' and the XBeach default values of gammajsp= 3.3 and fnyq= 0.3.
 
 The things that are tested for now is the performance of XBeach Surfbeat under different wave angles, Jonswap spectra, lateral boundaries and MPI configurations.
-This leads to the following folder structure: tests('neumann', 'cyclic', 'wavecrest'), cases('mainang_240', 'mainang_270', 'mainang_300'), the new layer subcases('s_10', 's_100000') and runs('benchmark','m3n1','m1n3','m3n3').
-So an extra layer called subcases is added to change the parameter 's' of the Jonswap spectrum, for the large value of 100000 you get a spectrum of only one frequency and thus monochromatic waves and 10 is the default value in XBeach.
+This leads to the following folder structure: tests ('neumann', 'cyclic', 'wavecrest'), cases ('mainang_240', 'mainang_270', 'mainang_300'), the new layer subcases('s_10', 's_100000') and runs ('benchmark','m3n1','m1n3','m3n3').
+So an extra layer called subcases is added to change the parameter 's' of the Jonswap spectrum, for the large value of 100000 you get a spectrum of only one frequency and thus monochromatic waves and the value of 10 is the default value in XBeach.
 
 So compared to the avalanching test there are less parameter changes, different cases and exceptions, which makes the setup and analysis a lot cleaner.
 In the paragraphs below notable input of the specific scripts is mentioned, if it is not yet adressed above. 
@@ -66,7 +60,8 @@ Besides the output 'check' also 'Hmean_ratio' is an output which can be and is p
 At least one more test should be added to in some way compare the results of the benchmark with that of the other runs.
 But their can probabaly be also thought of other individual checks that could be usefull.
 
-(temporary) After all these checks there are now 3 figures that are created per run.
+(Possibly temporary:) 
+After all these checks there are now 3 figures that are created per run.
 In the first the result of 'Hmean_ratio' is plotted along the y-axis to give more insight in the results.
 The second figure containts a snap shot of the Hrms on the last timestep, which gives insight in the wave direction, wave groupiness and shadow zone.
 The last figure plot the massbalance of 'zs' in time, which gives insight in the amount of water entering and leaving the model.
@@ -74,7 +69,7 @@ The last figure plot the massbalance of 'zs' in time, which gives insight in the
 checks
 ------
 
-For the avalanching diagnostic test the checks  'massbalance_intime', 'wave_generation and 'n_Hrms' were created.
+For the waves diagnostic test the checks  'massbalance_intime', 'wave_generation and 'n_Hrms' were created.
 
 
 database

@@ -12,7 +12,8 @@ Herefore the setup of the models is simple and only the relevant processes to te
 The idea is that by testing specific processes and functionalities of the code, more insight is created whether they still perform as intended.
 Also bugs should be easier to find because of a structured development of the tests. 
 
-The source code of the scripts can be found at https://github.com/openearth/xbeach-test-python
+The idea of this online manual is to outline the setup of the framework for the diagnostic tests, the approaches for the different diagnostic tests and to make the scripts more understandable.
+The source code of the scripts can be found at https://github.com/openearth/xbeach-test-python.
 
 .. toctree::
    :maxdepth: 2
@@ -22,7 +23,8 @@ The source code of the scripts can be found at https://github.com/openearth/xbea
    scripts
    avalanching
    waves
-
+   
+    
 Acknowledgements
 ================
 

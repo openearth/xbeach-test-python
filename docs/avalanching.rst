@@ -99,7 +99,8 @@ Then the slopes in m- and n-direction are checked, based on the appropriate loca
 Thereafter comes the mpi check in m- and/or n-direction when appropriate for the run.
 At last the benchmarkcomparison in m- and/or n-direction is performed, which looks at the Root Mean Squared Error between the final bed level of the benchmark and the other corresponding runs.
 
-(temporary) At the end of the script a plot is made for every run to visualise the initial and final bed levels along the middle transect.
+(Possibly temporary:) 
+At the end of the script a plot is made for every run to visualise the initial and final bed levels along the middle transect.
 With this plot many off the occurring error codes 1 can be explained.
 
 
