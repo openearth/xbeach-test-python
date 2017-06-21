@@ -15,18 +15,17 @@ def mpidims(dr):
         if re.match('^Distribution of matrix on processors', line):  
             iline = i      
             break       
+    dim = []
     if iline > 0:  
         iline += 2
+        while not re.match('^proc', lines[iline].strip() ):       
+            l = lines[iline].strip()
+            ll = l.split('   ')
+            dim.append(ll)
+            dims = np.asarray(dim)
+            iline += 1
     else:
-        raise ValueError('The specified log file has no information on mpi domains. Probably it was run on a single core')
-            
-    dim = []
+        print('The specified log file has no information on mpi domains. Probably it was run on a single core')
+        dims = 0           
     
-    while not re.match('^proc', lines[iline].strip() ):       
-        l = lines[iline].strip()
-        ll = l.split('   ')
-        dim.append(ll)
-        dims = np.asarray(dim)
-        iline += 1
-        
     return dims    

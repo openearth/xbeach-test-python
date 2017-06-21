@@ -220,23 +220,27 @@ def m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, dr, mpicon, mpinr):                     
         #processing 
         zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = midtrans(zb0, zbEnd, ny)
         slope_m = slope(zbEndtrans_m, dx, nx)
-        mpidim = mpidims(dr)               
-        locm2 = int(mpidim[:,1][mpinr]) + 0                                     #Note: The overlap of the mpi domains is 3 cells    
-        locm1 = locm2 - 1                                                       #You want locm1 to be before the MPI-boundary
-        zbEnd_locm2 = zbEndtrans_m[locm2]
-        zbEnd_locm1 = zbEndtrans_m[locm1]
-        deltareal_m= zbEnd_locm2 - zbEnd_locm1
-        deltatheory_m=slope_m[locm1-0] * (locm2 - locm1) * dx #kijken naar die -0
-        delta_m=abs(deltareal_m-deltatheory_m)
-        logger.debug('locm2= %s, locm1= %s, slope_m[locm1]= %s, deltareal_m= %s and deltatheory_m= %s', locm2, locm1, slope_m[locm1], deltareal_m, deltatheory_m)
-
-        #checking
-        if delta_m > mpicon:
-            check = 1
-            logger.debug('check= %s --> delta_m %s > mpiconstraint %s', check, delta_m, mpicon)            
+        mpidim = mpidims(dr)
+        if mpidim == 0:
+            logger.warning('Something has gone wrong by reading in the XBlog file to read the MPI dimensions') 
+            check = 2              
         else:
-            check = 0
-            logger.debug('check= %s', check)                   
+            locm2 = int(mpidim[:,1][mpinr]) + 0                                     #Note: The overlap of the mpi domains is 3 cells    
+            locm1 = locm2 - 1                                                       #You want locm1 to be before the MPI-boundary
+            zbEnd_locm2 = zbEndtrans_m[locm2]
+            zbEnd_locm1 = zbEndtrans_m[locm1]
+            deltareal_m= zbEnd_locm2 - zbEnd_locm1
+            deltatheory_m=slope_m[locm1-0] * (locm2 - locm1) * dx #kijken naar die -0
+            delta_m=abs(deltareal_m-deltatheory_m)
+            logger.debug('locm2= %s, locm1= %s, slope_m[locm1]= %s, deltareal_m= %s and deltatheory_m= %s', locm2, locm1, slope_m[locm1], deltareal_m, deltatheory_m)
+    
+            #checking
+            if delta_m > mpicon:
+                check = 1
+                logger.debug('check= %s --> delta_m %s > mpiconstraint %s', check, delta_m, mpicon)            
+            else:
+                check = 0
+                logger.debug('check= %s', check)                   
     else:
         raise ValueError('mmpi>1 expected, got:', mmpi)
     return check
@@ -249,22 +253,26 @@ def n_mpi(nmpi, zb0, zbEnd, dy, ny, dr, mpicon, mpinr):
         #processing 
         zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = midtrans(zb0, zbEnd, ny)
         slope_n = slope(zbEndtrans_n, dy, ny)
-        mpidim = mpidims(dr)               
-        locn2 = int(mpidim[:,3][mpinr]) + 0                                             
-        locn1 = locn2 - 1                                                       
-        zbEnd_locn2 = zbEndtrans_n[locn2]
-        zbEnd_locn1 = zbEndtrans_n[locn1]
-        deltareal_n= zbEnd_locn2 - zbEnd_locn1
-        deltatheory_n=slope_n[locn1-0] * (locn2 - locn1) * dy  #kijken naar die -0
-        delta_n=abs(deltareal_n-deltatheory_n)
-        logger.debug('locn2= %s, locn1= %s, slope_n[locn1]= %s, deltareal_n= %s and deltatheory_n= %s', locn2, locn1, slope_n[locn1], deltareal_n, deltatheory_n)
-        #checking
-        if delta_n > mpicon:
-            check = 1
-            logger.debug('check= %s --> delta_n %s > mpiconstraint %s', check, delta_n, mpicon)            
-        else:
-            check = 0  
-            logger.debug('check= %s', check)                 
+        mpidim = mpidims(dr)
+        if mpidim == 0:
+            logger.warning('Something has gone wrong by reading in the XBlog file to read the MPI dimensions') 
+            check = 2 
+        else:               
+            locn2 = int(mpidim[:,3][mpinr]) + 0                                             
+            locn1 = locn2 - 1                                                       
+            zbEnd_locn2 = zbEndtrans_n[locn2]
+            zbEnd_locn1 = zbEndtrans_n[locn1]
+            deltareal_n= zbEnd_locn2 - zbEnd_locn1
+            deltatheory_n=slope_n[locn1-0] * (locn2 - locn1) * dy  #kijken naar die -0
+            delta_n=abs(deltareal_n-deltatheory_n)
+            logger.debug('locn2= %s, locn1= %s, slope_n[locn1]= %s, deltareal_n= %s and deltatheory_n= %s', locn2, locn1, slope_n[locn1], deltareal_n, deltatheory_n)
+            #checking
+            if delta_n > mpicon:
+                check = 1
+                logger.debug('check= %s --> delta_n %s > mpiconstraint %s', check, delta_n, mpicon)            
+            else:
+                check = 0  
+                logger.debug('check= %s', check)                 
     else:
         raise ValueError('nmpi>1 expected, got:', nmpi)
     return check
