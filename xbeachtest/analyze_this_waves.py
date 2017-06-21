@@ -127,10 +127,10 @@ for i in range(len(u['tests'])):
                         check = checks.bedlevelchange(zs0, zsEnd)  
                         
                     elif checklist[l] in ['massbalance_zb']: 
-                        check, massbalance = checks.massbalance(zb0, zbEnd, dx, dy, c['massbalancecon'])
+                        check, massbalance = checks.massbalance(zb0, zbEnd, dx, dy, c['massbalancecon_zb'])
                         
                     elif checklist[l] in ['massbalance_zs']:
-                        check, massbalance = checks.massbalance(zs0, zsEnd, dx, dy, c['massbalancecon'])  
+                        check, massbalance = checks.massbalance(zs0, zsEnd, dx, dy, c['massbalancecon_zs'])  
                     
                     elif checklist[l] in ['massbalance_intime']:
                         check, massbalance_intime = checks.massbalance_intime(zs, dx, dy, c['massbalancecon_intime'])
@@ -181,6 +181,7 @@ for i in range(len(u['tests'])):
                 plt.ylabel('Ratio of mean(Hrms(y))/mean(Hrms)')
                 plt.grid()
                 plt.savefig(filename = os.path.join(path , 'Hrms_ratio.png'))
+                plt.close()
                 
                 plt.figure(figsize=(10.0, 5.0))
                 plt.imshow(H[-1,:,:])
@@ -190,6 +191,7 @@ for i in range(len(u['tests'])):
                 plt.ylabel('Grid cells along y-axis(-)')
                 plt.colorbar()
                 plt.savefig(filename = os.path.join(path , 'Hrms_end.png'))
+                plt.close()
                 
                 check, massbalance_intime = checks.massbalance_intime(zs, dx, dy, c['massbalancecon_intime'])
                 plt.figure(figsize=(10.0, 5.0))

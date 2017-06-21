@@ -9,6 +9,7 @@ import os
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 #diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"
+#diroutmain = 'C:/Users/leijnse/Desktop/Checkouts/openearth/xbeach-test-python/xbeachtest/'
 
 path = os.path.join(diroutmain, 'xbeachtest-waves-setup.log')
 
@@ -97,14 +98,15 @@ u = dict(diroutmain = diroutmain,
 #%%INPUT FOR ANALYSIS OF RESULTS###############################################
 
 ###DICTIONARY FOR CHECKS###
-c = dict(checks_ind= ['bedlevelchange_zb','bedlevelchange_zs','massbalance_zb','massbalance_zs','wave_generation_offshore','wave_generation_coast','n_Hrms'], 
+c = dict(checks_ind= ['bedlevelchange_zb','bedlevelchange_zs','massbalance_zb','massbalance_zs','massbalance_intime','wave_generation_offshore','wave_generation_coast','n_Hrms'], 
         checks_comp= [],#'benchmarkcomp_m', 'benchmarkcomp_n'], 
         xloc1= 0,
         xloc2= 201,
         tstart= 5*60/p['tintg'],
         Hrmsconstraint= 0.10,
-        massbalancecon_intime= 250000,
-        massbalancecon= 5) #m3     
+        massbalancecon_intime= 250000, #m3  
+        massbalancecon_zs= 250000, #m3  
+        massbalancecon_zb=1) #m3     
         
 
 #%%MAKING THE DICTIONARY TEXT FILES############################################ 
