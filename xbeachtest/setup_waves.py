@@ -79,13 +79,18 @@ for i in range(len(u['tests'])):
                 
                 bathy = Bathymetry(**bp)                             
                 bathy.dean1_2d(zmin = b['zmin'], zmax = b['zmax'], beta_dry = b['beta_dry'], height = b['height'])    
+                xx = bathy.x
+                yy=bathy.y
+                zz=bathy.z
                 
-                XBbathy = XBeachBathymetry(bathy.x, bathy.y, bathy.z)                         
+                XBbathy = XBeachBathymetry(bathy.x, bathy.y, bathy.z) 
+                logger.debug(XBbathy)                        
                 XBbathy.gridextend(grextype= b['grextype'], grex= b['grex'], dx= p['dx'])
-                                          
+                logger.debug(XBbathy) 
+#                logger.debug(XBbathy)                            
                 xb['bathymetry'] = XBbathy                                          #bypassing xb.set_bathymetry                                   
                 xb.write(path)   
-                
+#                logger.debug(xb)
                 #making jonswap.txt:
                 with open(os.path.join(path, 'jonswap.txt'), 'w') as fp:
                     fp.write('Hm0 = %0.6f\n' % w['Hm0'])

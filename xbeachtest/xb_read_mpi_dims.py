@@ -25,7 +25,7 @@ def mpidims(dr):
             dims = np.asarray(dim)
             iline += 1
     else:
-        print('The specified log file has no information on mpi domains. Probably it was run on a single core')
+        print('The specified log file has no information on mpi domains. Probably it was run on a single core, or no XBlog file was found')
         dims = 0           
     
     return dims    

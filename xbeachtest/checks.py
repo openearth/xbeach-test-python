@@ -122,12 +122,12 @@ def n_Hrms(H, ny, tstart, Hrmsconstraint):
         
     for j in range(ny):
         if Hmean_ratio[j] > (1+Hrmsconstraint): 
-            print('error Hmean >%s', (1+Hrmsconstraint))
+            logger.debug('error Hmean >%s', (1+Hrmsconstraint))
             check = 1
             break
             
         elif Hmean_ratio[j] <(1-Hrmsconstraint):
-            print('error Hmean <%s', (1-Hrmsconstraint))
+            logger.debug('error Hmean <%s', (1-Hrmsconstraint))
             check = 1
             break   #? --> Je wilt niet dat check weer op 1 wordt gezet als er een goede na een slechte komt
         else:
