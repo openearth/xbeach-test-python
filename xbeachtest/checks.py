@@ -280,28 +280,33 @@ def n_mpi(nmpi, zb0, zbEnd, dy, ny, dr, mpicon, mpinr):
 ###CHECK: Benchmark comparison using the RMSE###                    #ZEGGEN DAT JE HIER OP MOET LETTEN MET RICHTING VAN INPUT
 def rmse_comp(zbEndbench, zbEnd, ny, rmsecon):
     logger.info('rsme comparison is called for')
+#    print(zbEndbench)
+    #processing
+    if len(zbEndbench) == 0:    
+        logger.warning('zbEndbench is empty!')
+        check = 2   
+    else:    
+        diff = np.zeros(len(zbEndbench))
+        for i in range(len(zbEnd)):
+    #        print('i= %s',i)
+            diff[i] = zbEnd[i] - zbEndbench[i]
+        
+    #    diff = zbEnd - zbEndbench
+    #    diffasarray= np.asarray(diff)
+        
+        
+        rmse = (np.sqrt(np.mean((diff)**2)))
+    #    print('rmse= %s', rmse)
+        logger.debug('rmse= %s', rmse)
+    #    print('zbEnd-zbEndbench is called for: %s', (zbEnd-zbEndbench))  #JE HEBT HIER HET PROBLEEM DAT ZE NIET ALTIJD HETZELFDE GEDRAAID ZIJN!!!
+        #checking
+        if rmse > rmsecon:
+            check = 1
+            logger.debug('check= %s --> rmse %s > rmseconstraint %s', check, rmse, rmsecon)
+        else:
+            check = 0
+            logger.debug('check= %s', check)
     
-    #processing 
-    diff = np.zeros(len(zbEndbench))
-    for i in range(len(zbEnd)):
-#        print('i= %s',i)
-        diff[i] = zbEnd[i] - zbEndbench[i]
-    
-#    diff = zbEnd - zbEndbench
-#    diffasarray= np.asarray(diff)
-    
-    
-    rmse = (np.sqrt(np.mean((diff)**2)))
-#    print('rmse= %s', rmse)
-    logger.debug('rmse= %s', rmse)
-#    print('zbEnd-zbEndbench is called for: %s', (zbEnd-zbEndbench))  #JE HEBT HIER HET PROBLEEM DAT ZE NIET ALTIJD HETZELFDE GEDRAAID ZIJN!!!
-    #checking
-    if rmse > rmsecon:
-        check = 1
-        logger.debug('check= %s --> rmse %s > rmseconstraint %s', check, rmse, rmsecon)
-    else:
-        check = 0
-        logger.debug('check= %s', check)
     return check   
 
-
+logger.info('Close checks.py')

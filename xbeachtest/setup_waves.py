@@ -122,3 +122,5 @@ for i in range(len(u['tests'])):
                     fp.write('module list\n\n')
                                     
                     fp.write('mpirun -report-bindings -np %d -map-by core xbeach\n\n' % (nprocesses+1))
+
+logger.info('Close setup_waves.py')

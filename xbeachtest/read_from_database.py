@@ -17,12 +17,12 @@ ones, i = database.read_ones_from_db(revisionnr)   #NOG KIJKEN OF JE DIT ANDERS 
 if i==0:
     ones[i]= 'The database does not contain ones for this revision'
 else:
-    ones['0']= 'Apperently some unsatisfactory result ocurred in the diagnostic tests. See also the log file, database and the provided figures and netCDF files in their repective folders'
+    ones['Remark']= 'Apperently some unsatisfactory result ocurred in the diagnostic tests. See also the log file, database and the provided figures and netCDF files in their repective folders'
 twos, j = database.read_twos_from_db(revisionnr) 
 if j==0:
     twos[j]='The database does not contain twos for this revision'
 else:
-    twos['0']= 'Apperently some check was not performed correctly. See also the log file and database.'
+    twos['Remark']= 'Apperently some check was not performed correctly. See also the log file and database.'
 database.close_database()
 
 

@@ -58,3 +58,5 @@ def read_twos_from_db(revisionnr):
 def close_database():
     db.close()
     conn.close()
+    
+logger.info('Close database.py')

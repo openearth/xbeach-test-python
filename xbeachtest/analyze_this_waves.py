@@ -20,7 +20,7 @@ diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 os.chdir(diroutmain) 
 
 dirout = os.path.join(diroutmain, 'xbeachtest-waves-analyze_this.log')  
-#logging.basicConfig(filename= dirout, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
+logging.basicConfig(filename= dirout, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
 logger = logging.getLogger(__name__)
 logger.info('diroutmain= %s', diroutmain)
 logger.info('analyze_this_waves.py is called for')
@@ -221,3 +221,5 @@ for i in range(len(u['tests'])):
                 elif warning==1:
                     print('Performing plotting sequence not possible on location %s', fname)
                     logger.warning('Performing plotting sequence not possibleon location %s', fname)
+                    
+logger.info('Close analyze_this_waves.py')

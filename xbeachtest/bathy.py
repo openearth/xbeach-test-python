@@ -71,8 +71,8 @@ class Bathymetry(XBeachBathymetry):
         ilast = np.nonzero(z<=zmin)[0][0]
         logger.info('ifirst= ', str(ifirst))
         logger.info('ilast= ', str(ilast))
-        print('ifirst= ', str(ifirst))
-        print('ilast= ', str(ilast))
+        logger.debug('ifirst= ', str(ifirst))
+        logger.debug('ilast= ', str(ilast))
         xt = x[ifirst:ilast]
         zt = z[ifirst:ilast]
         x = xt + abs(xt[0])         #added wrt matlab
@@ -146,3 +146,5 @@ class Bathymetry(XBeachBathymetry):
 #        self.width = self.shorewidth + self.dunewidth + self.dx   --> je geeft de width zelf al op
         self.x, self.z = self.dean1(zmin, zmax, beta_dry, height)
         self.x, self.y, self.z = self.yuniform(self.x, self.z)
+        
+logger.info('Close bathy.py')

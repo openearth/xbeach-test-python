@@ -112,9 +112,11 @@ database
 --------
 database.py is a script to make and use a database to store the results of the checks per module/test/case/run/check, and is shared between the diagnostic tests. 
 It uses a SLQ type database, for now sqlite3 for Python as a local database.
+The database is human readable with a program like 'DB browser for sqlite'. 
 
 
 read_from_database
 ------------------
 read_from_database.py is a script to read the one and two codes from the database for a specific revision of the trunk version of XBeach.
+Both are captured in a dictionary and written away to a text file.
 When error codes have occurred these are send to the necessary recipients.

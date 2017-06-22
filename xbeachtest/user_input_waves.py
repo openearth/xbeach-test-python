@@ -13,7 +13,7 @@ diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
 
 path = os.path.join(diroutmain, 'xbeachtest-waves-setup.log')
 
-#logging.basicConfig(filename= path, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
+logging.basicConfig(filename= path, format='%(asctime)-15s %(name)-8s %(levelname)-8s %(message)s', level=logging.DEBUG) #.DEBUG)    
 logger = logging.getLogger(__name__)
 logger.info('user_input.py is called for') 
 
@@ -124,3 +124,5 @@ with open(os.path.join(diroutmain, 'dictU_waves.txt'), 'w') as f:
     
 with open(os.path.join(diroutmain, 'dictW_waves.txt'), 'w') as f:
     json.dump(w, f, indent=4)
+    
+logger.info('Close user_input_waves.py')

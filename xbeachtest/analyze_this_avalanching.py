@@ -12,9 +12,10 @@ import checks
 import matplotlib.pyplot as plt
 
 revisionnr = os.getenv('SVN_REVISION')
-
+#revisionnr = 5187 + 1
 #Open dictionaries from test-files:
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
+#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"
 os.chdir(diroutmain) 
 
 dirout = os.path.join(diroutmain, 'xbeachtest-avalanching-analyze_this.log')  
@@ -241,3 +242,5 @@ for i in range(len(u['tests'])):
             elif warning==1:
                 print('Performing plotting sequence not possible on location %s', fname)
                 logger.warning('Performing plotting sequence not possibleon location %s', fname)
+                
+logger.info('Close analyze_this_avalanching.py')
