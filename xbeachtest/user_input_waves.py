@@ -56,7 +56,7 @@ p = dict(
         D50 = 200e-6,
         zs0 = 0,                                                                        
         #output
-        tintg = 10,  
+        tintg = 60,  
         tstop = 600,    
         nglobalvar = ['zb','zs','H','ue','ve','ui','vi']) 
 
