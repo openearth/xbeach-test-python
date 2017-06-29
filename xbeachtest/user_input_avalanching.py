@@ -133,7 +133,6 @@ c = dict(
         mpinr = -1,
         slpcon = 0.1, 
         slploc = [0,20,-20,-1], 
-#        slploc_pos = [2,12,30,-2], 
         slptheo_cross_neg_normal = [0,0.017,wetslp,dryslp],
         slptheo_cross_neg_wet = [0,wetslp,wetslp,wetslp],  
         slptheo_cross_neg_dry = [0,0.017,dryslp,dryslp], 
