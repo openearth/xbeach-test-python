@@ -8,8 +8,6 @@ import logging
 import os
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"
-#diroutmain = 'C:/Users/leijnse/Desktop/Checkouts/openearth/xbeach-test-python/xbeachtest/'
 
 path = os.path.join(diroutmain, 'xbeachtest-waves-setup.log')
 
@@ -89,7 +87,7 @@ u = dict(diroutmain = diroutmain,
          cases = ['mainang_240', 'mainang_270', 'mainang_300'],
          mainang = [240, 270, 300], 
          
-         subcases = ['s_10', 's_100000'],        #DIT TOEVOEGEN AAN SETUP EN ANALYZE_THIS!!!
+         subcases = ['s_10', 's_100000'],               #subcase is new wrt avalanching test
          s = [10, 100000],
          
          runs = ['benchmark','m3n1','m1n3','m3n3'])            
@@ -99,7 +97,7 @@ u = dict(diroutmain = diroutmain,
 
 ###DICTIONARY FOR CHECKS###
 c = dict(checks_ind= ['bedlevelchange_zb','bedlevelchange_zs','massbalance_zb','massbalance_zs','massbalance_intime','wave_generation_offshore','wave_generation_coast','n_Hrms'], 
-        checks_comp= [],#'benchmarkcomp_m', 'benchmarkcomp_n'], 
+        checks_comp= [],
         xloc1= 0,
         xloc2= 201,
         tstart= 5*60/p['tintg'],
