@@ -11,16 +11,16 @@ After collaboration the first setup focusses on the Surfbeat mode of XBeach in c
 Herefore the hydrodynamic processes 'swave' and 'lwave' are turned on (just as flow for now) and morphodynamic processes as 'sedtrans', 'morphology' and 'avalanching' are turned off.
 
 The bathymetry consists of a Dean profile from -15m to +2m, after which there is a steeper linear dune slope of 0.1. 
-For now the grid is equidistant with dx=10m and dy=20m, but it is advised to make 'dx' depth dependent to optimise the internal timestep of XBeach because of the CFL conditions (not yet implemented, can be done as in OET: xb_grid_xgrid.m)
+For now the grid is equidistant with dx=10m and dy=20m, but it is advised to make 'dx' depth dependent to optimise the internal timestep of XBeach because of the CFL conditions (not yet implemented, can be done as in OET: xb_grid_xgrid.m).
 
 For the boundaries 'front' is set to 'abs_2d', 'back' is set to 'wall', 'left' and 'right' are the default of 'neumann' and 'lateralwave' is altered between 'cyclic', 'neumann' and 'wavecrest'. Furthermore
-As in the avalanching test also the combination with MPI is tested, but now only the 2D options 'm1n1' (the benchmark) 'm3n1', 'm1n3' and 'm3n3' are used because the addition of 1D runs is no added value.
+as in the avalanching test also the combination with MPI is tested, but now only the 2D options 'm1n1' (the benchmark), 'm3n1', 'm1n3' and 'm3n3' are used because the addition of 1D runs is no added value.
 
 Because wave are now added to the XBeach model, a wave spectrum should be specified. For this the commonly used Jonswap spectrum is added, with a seperate input file called jonswap.txt.
 In here a wave height Hm0 of 3m is specified, together with Tp=8s, an altering wave angle 'mainang', an altering value for 's' and the XBeach default values of gammajsp= 3.3 and fnyq= 0.3.
 
 The things that are tested for now is the performance of XBeach Surfbeat under different wave angles, Jonswap spectra, lateral boundaries and MPI configurations.
-This leads to the following folder structure: tests ('neumann', 'cyclic', 'wavecrest'), cases ('mainang_240', 'mainang_270', 'mainang_300'), the new layer subcases('s_10', 's_100000') and runs ('benchmark','m3n1','m1n3','m3n3').
+This leads to the following folder structure: tests ('neumann', 'cyclic', 'wavecrest'), cases ('mainang_240', 'mainang_270', 'mainang_300'), the new layer subcases('s_10', 's_100000') and runs ('benchmark', 'm3n1', 'm1n3', 'm3n3').
 So an extra layer called subcases is added to change the parameter 's' of the Jonswap spectrum, for the large value of 100000 you get a spectrum of only one frequency and thus monochromatic waves and the value of 10 is the default value in XBeach.
 
 So compared to the avalanching test there are less parameter changes, different cases and exceptions, which makes the setup and analysis a lot cleaner.
