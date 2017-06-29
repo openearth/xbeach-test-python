@@ -8,12 +8,10 @@ import json
 import os
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"
 revisionnr = os.getenv('SVN_REVISION')
-#revisionnr = 5186 + 0
 
 #%%READING OF RESULTS IN DATABASE##############################################
-ones, i = database.read_ones_from_db(revisionnr)   #NOG KIJKEN OF JE DIT ANDERS WILT
+ones, i = database.read_ones_from_db(revisionnr)   
 if i==0:
     ones[i]= 'The database does not contain ones for this revision'
 else:
