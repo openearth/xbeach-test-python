@@ -12,10 +12,8 @@ import checks
 import matplotlib.pyplot as plt
 
 revisionnr = os.getenv('SVN_REVISION')
-#revisionnr = 5187 + 1
-#Open dictionaries from test-files:
+#Open dictionaries from text-files:
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"
 os.chdir(diroutmain) 
 
 dirout = os.path.join(diroutmain, 'xbeachtest-avalanching-analyze_this.log')  
@@ -139,16 +137,16 @@ for i in range(len(u['tests'])):
                                 slptheo = c['slptheo_cross_pos_dry']
                             else:
                                 slptheo = c['slptheo_cross_pos_normal']
-                        elif u['tests'][i] in ['pos_y', 'neg_y','hor']: #Hier hoeft niks omgedraaid te worden omdat het om een slope van 0 gaat
+                        elif u['tests'][i] in ['pos_y', 'neg_y','hor']: 
                             slptheo = c['slptheo_long'] 
                         logger.debug('slptheo= %s', slptheo)    
-                        check = checks.m_slope(zb0, zbEnd, nx, ny, dx, c['slploc'], slptheo, c['slpcon'])   #KIJKEN OF SLPLOC NIET OOK NOG MOET VERANDEREN BIJ POS CASES (niet spiegelen maar andere waarden!!!)
+                        check = checks.m_slope(zb0, zbEnd, nx, ny, dx, c['slploc'], slptheo, c['slpcon'])   
                         
                             
                     elif checklist[l] in ['n_slope']:
                         if runs[k] in ['benchmark','m3n1','m1n3','m3n3']:
                             if u['tests'][i] in ['pos_x', 'neg_x','hor']:   #'hor' should have a slope of 0, which is specified in slptheo_long
-                                slptheo = c['slptheo_long']             #Hier hoeft niks omgedraaid te worden omdat het om slopes van 0 gaat
+                                slptheo = c['slptheo_long']             
                             elif u['tests'][i] in ['neg_y']:
                                 if u['cases'][j] in ['zs0_50']:
                                     slptheo = c['slptheo_cross_neg_wet']
@@ -167,12 +165,12 @@ for i in range(len(u['tests'])):
                         else:
                             check = 0
                         logger.debug('slptheo= %s', slptheo)                            
-                        check = checks.n_slope(zb0, zbEnd, nx, ny, dy, c['slploc'], slptheo, c['slpcon'])       #check if correctly changed to 'slptheo' instead of 'c['slptheo_long']
+                        check = checks.n_slope(zb0, zbEnd, nx, ny, dy, c['slploc'], slptheo, c['slpcon'])     
                         
                             
                     elif checklist[l] in ['m_mpi']:    
                         if mmpi>1:
-                            check = checks.m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, path, c['mpicon'], c['mpinr'])   #dr moet per run veranderen dus daarom is u['diroutmain'] aangepast naar 'path'
+                            check = checks.m_mpi(mmpi, zb0, zbEnd, dx, nx, ny, path, c['mpicon'], c['mpinr'])   
                         else:
                             check = 0       #een 0 geven als mmpi = 1
                       
