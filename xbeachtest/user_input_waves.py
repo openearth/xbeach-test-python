@@ -56,7 +56,7 @@ p = dict(
         D50 = 200e-6,
         zs0 = 0,                                                                        
         #output
-        tintg = 60,  
+        tintg = 30,  
         tstop = 600,    
         nglobalvar = ['zb','zs','H','ue','ve','ui','vi']) 
 
@@ -106,7 +106,7 @@ c = dict(checks_ind= ['bedlevelchange_zb','bedlevelchange_zs','massbalance_zb','
         Hrmsconstraint= 0.10,
         massbalancecon_intime= 250000, #m3  
         massbalancecon_zs= 250000, #m3  
-        massbalancecon_zb=1) #m3     
+        massbalancecon_zb=0) #m3     
         
 
 #%%MAKING THE DICTIONARY TEXT FILES############################################ 

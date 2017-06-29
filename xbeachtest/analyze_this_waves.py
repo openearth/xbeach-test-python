@@ -191,7 +191,7 @@ for i in range(len(u['tests'])):
                     plt.ioff()
                     plt.figure(figsize=(10.0, 5.0))
                     plt.plot(Hmean_ratio)                
-                    plt.title('Ratio of mean Hrms along transect in x-direction and mean Hrms over the whole grid, after spinup time')
+                    plt.title('Ratio of mean Hrms along transect and over the whole grid, after spinup time')
                     plt.xlabel('Grid cells along y-axis(-)')
                     plt.ylabel('Ratio of mean(Hrms(y))/mean(Hrms)')
                     plt.grid()
