@@ -12,11 +12,9 @@ import checks
 import matplotlib.pyplot as plt
 
 revisionnr = os.getenv('SVN_REVISION')
-#revisionnr = 5186 + 1
 
-#Open dictionaries from test-files:
+#Open dictionaries from text-files:
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC_RUNLOCATION')
-#diroutmain = "P:/xbeach/skillbed/diagnostic/lastrun/"
 os.chdir(diroutmain) 
 
 dirout = os.path.join(diroutmain, 'xbeachtest-waves-analyze_this.log')  
@@ -54,7 +52,7 @@ else:
     logger.info('dictionary w is read from text file')
     
 #The result per check will be put in a database using:    
-database.create_table()                                         ###TESTEN OF DIT GOED GAAT OMDAT JE AL EEN TABEL HEBT AANGEMAAKT... OF KAN HET DAAROM WEG ZOLANG AVALANCHING ANALYSE MAAR EERST GEDRAAID WORDT?
+database.create_table()                                         
     
 #%%READING IN, ANALYSIS AND STORAGE OF MODEL RESULTS###########################
 
@@ -151,24 +149,7 @@ for i in range(len(u['tests'])):
                             check = checks.wave_generation(H, ue, ve, ui, vi, c['xloc2'], c['tstart']) 
                             
                         elif checklist[l] in ['n_Hrms']:
-                            check, Hmean_ratio = checks.n_Hrms(H, ny, c['tstart'], c['Hrmsconstraint'])
-    #==============================================================================
-    #                     elif checklist[l] in ['benchmarkcomp_m']:
-    #                         zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
-    #                         if u['runs'][k] in ['benchmark']:
-    #                             zbEndtrans_m_bench.extend(zbEndtrans_m)
-    #                         check = checks.rmse_comp(zbEndtrans_m_bench,zbEndtrans_m, ny, c['rmsecon'])    
-    #     
-    #                     elif checklist[l] in ['benchmarkcomp_n']:
-    #                         zb0trans_m, zbEndtrans_m, zb0trans_n, zbEndtrans_n = checks.midtrans(zb0, zbEnd, ny)
-    #                         if runs[k] in ['benchmark']:                  
-    #                             zbEndtrans_n_bench.extend(zbEndtrans_n)
-    #     
-    #                         if u['runs'][k] in ['m1', 'm3']:
-    #                             check = 0               # code 0 geven want er valt in y-richting niets te checken
-    #                         else:
-    #                             check = checks.rmse_comp(zbEndtrans_n_bench,zbEndtrans_n, ny, c['rmsecon'])   
-    #==============================================================================                        
+                            check, Hmean_ratio = checks.n_Hrms(H, ny, c['tstart'], c['Hrmsconstraint'])                    
                         else:
                             check = 2                                                   # check = 2 means that the check is not performed or not finished correctly
                 
