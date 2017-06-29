@@ -11,7 +11,7 @@ logger = logging.getLogger(__name__)
 logger.info('checks.py is called for')
 
 diroutmain = os.getenv('XBEACH_DIAGNOSTIC')
-path = os.path.join(diroutmain,'xbeachtest-results-test.db')            
+path = os.path.join(diroutmain,'xbeachtest-results.db')            
 conn = sqlite3.connect(path)    
 logger.info("Opened database successfully")
 
