@@ -58,8 +58,8 @@ class Bathymetry(XBeachBathymetry):
         logger.debug('ws= ', str(ws))
         return ws
            
-    def dean1(self, zmin, zmax, beta_dry, height = 0):        #based on OET: dean_beach_profile.m (not exactly the same)
-        logger.info('dean profile 1 is called for')        #beta_dry is the dry slope (above z=0)
+    def dean1(self, zmin, zmax, beta_dry, height = 0):          #based on OET: dean_beach_profile.m (not exactly the same)
+        logger.info('dean profile 1 is called for')             #beta_dry is the dry slope (above z=0)
         x = np.arange(-10000, 10000, self.dx)
         vfall = self.fall_velocity_vanrijn2007()
         logger.debug('vfall= ', str(vfall))
@@ -75,17 +75,15 @@ class Bathymetry(XBeachBathymetry):
         logger.debug('ilast= ', str(ilast))
         xt = x[ifirst:ilast]
         zt = z[ifirst:ilast]
-        x = xt + abs(xt[0])         #added wrt matlab
+        x = xt + abs(xt[0])                 #added wrt matlab
         z = zt[::-1] + height               #added wrt matlab
-#        logger.debug('z=', z)
-#        logger.debug('x= ', x)
         return x, z
 
     def dean2(self):             #--> evt maken als in dean_beach_profile.m / dean1 en dean2 maken
         logger.debug('dean profile 2 is called for')    
         x = np.arange(-self.width, 0, self.dx)
         ws = ((self.s-1)*9.81*self.D50**2/(18*self.v))                          #eq 6.7 in coastal dynamics book  
-        A = 0.5*ws**0.44        #0.51 in matlab                                                #eq 7.7 in coastal dynamics book  
+        A = 0.5*ws**0.44                                                        #eq 7.7 in coastal dynamics book  
         z = -abs(A*np.power(-1*x, self.m)) + self.height
         x += self.width   
         return x, z
@@ -143,7 +141,6 @@ class Bathymetry(XBeachBathymetry):
         
     def dean1_2d(self, zmin, zmax, beta_dry, height, **kwargs):
         logger.debug('dean1_2d is called for')
-#        self.width = self.shorewidth + self.dunewidth + self.dx   --> je geeft de width zelf al op
         self.x, self.z = self.dean1(zmin, zmax, beta_dry, height)
         self.x, self.y, self.z = self.yuniform(self.x, self.z)
         
